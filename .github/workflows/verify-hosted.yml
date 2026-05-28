@@ -1,15 +1,22 @@
 name: Verify Hosted
 
 on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "17 5 * * *"
   workflow_dispatch:
     inputs:
       web_url:
         description: Public web base URL to verify
-        required: true
+        required: false
+        default: https://docx-redline.onrender.com
         type: string
       api_url:
         description: Public API base URL to verify
-        required: true
+        required: false
+        default: https://docx-redline-api.onrender.com
         type: string
 
 env:
@@ -18,6 +25,9 @@ env:
 jobs:
   verify-hosted:
     runs-on: ubuntu-latest
+    env:
+      WEB_URL: ${{ inputs.web_url || 'https://docx-redline.onrender.com' }}
+      API_URL: ${{ inputs.api_url || 'https://docx-redline-api.onrender.com' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,9 +36,34 @@ jobs:
       - name: Verify hosted web and API routes
         run: |
           python scripts/verify_hosted.py \
-            --web-url "${{ inputs.web_url }}" \
-            --api-url "${{ inputs.api_url }}" \
+            --web-url "$WEB_URL" \
+            --api-url "$API_URL" \
             --output docs/qc-artifacts/hosted/github-actions.json
+      - name: Publish workflow summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path("docs/qc-artifacts/hosted/github-actions.json").read_text(encoding="utf-8"))
+          lines = [
+              "# Hosted verification",
+              "",
+              f"- Web URL: `{payload['web_url']}`",
+              f"- API URL: `{payload['api_url']}`",
+              f"- All passed: `{payload['all_passed']}`",
+              "",
+              "| Check | Status | URL |",
+              "| --- | --- | --- |",
+          ]
+          for check in payload["checks"]:
+              status = "PASS" if check["ok"] else f"FAIL ({check['status']})"
+              lines.append(f"| `{check['name']}` | {status} | `{check['url']}` |")
+
+          with open(Path(__import__("os").environ["GITHUB_STEP_SUMMARY"]), "a", encoding="utf-8") as handle:
+              handle.write("\n".join(lines) + "\n")
+          PY
       - name: Upload hosted verification artifact
         if: always()
         uses: actions/upload-artifact@v4

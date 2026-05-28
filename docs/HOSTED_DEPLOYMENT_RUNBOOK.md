@@ -74,6 +74,8 @@ Expected result:
 - every web route returns `200`
 - every worker route returns `200`
 
+The repository also has `.github/workflows/verify-hosted.yml`, which will use these same default URLs automatically on pushes to `main` and on its nightly schedule. That gives you a second source of hosted evidence in GitHub Actions after the public deployment is live.
+
 ### 5. Refresh the Section 23 audit
 
 Update:

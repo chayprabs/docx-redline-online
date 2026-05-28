@@ -109,6 +109,8 @@ Once both services are live, verify the hosted release gate with:
 pnpm verify:hosted -- --web-url https://docx-redline.onrender.com --api-url https://docx-redline-api.onrender.com --output docs/qc-artifacts/hosted/render.json
 ```
 
+The repo also includes a hosted-verification GitHub Actions workflow that uses those same default URLs on pushes to `main`, on a nightly schedule, or by manual dispatch with URL overrides.
+
 For the full last-mile checklist, see [docs/HOSTED_DEPLOYMENT_RUNBOOK.md](docs/HOSTED_DEPLOYMENT_RUNBOOK.md).
 
 ## Verification Commands
