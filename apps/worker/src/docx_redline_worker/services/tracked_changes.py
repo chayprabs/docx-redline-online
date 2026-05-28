@@ -2,6 +2,7 @@ import base64
 import copy
 import io
 import zipfile
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from lxml import etree
@@ -98,7 +99,10 @@ def _rename_deleted_text_nodes(element: etree._Element) -> None:
             descendant.tag = f"{{{NS['w']}}}t"
 
 
-def _unwrap_element(element: etree._Element, mutate: callable | None = None) -> None:
+def _unwrap_element(
+    element: etree._Element,
+    mutate: Callable[[etree._Element], None] | None = None,
+) -> None:
     parent = element.getparent()
     if parent is None:
         return
