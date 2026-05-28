@@ -5,13 +5,13 @@ import { PlaygroundLauncher } from "../components/playground-launcher";
 const workflowCards = [
   {
     href: "/docx-redline",
-    title: "Redline a DOCX",
-    description: "Compare two Word documents, inspect tracked changes, and export a redline DOCX.",
+    title: "Redline two DOCX files",
+    description: "Compare two documents, inspect tracked changes, and export the redline DOCX.",
   },
   {
     href: "/docx-comments-extract",
     title: "Extract comments",
-    description: "Pull comment threads, replies, timestamps, and resolved state into JSON or Markdown.",
+    description: "Pull threads, replies, timestamps, and resolved state into JSON or Markdown.",
   },
   {
     href: "/docx-to-markdown",
@@ -33,26 +33,21 @@ export default function Home() {
               Compare DOCX versions online and work the redline without Word.
             </h1>
             <p className="mt-4 text-base leading-8 text-[color:var(--ink-muted)]">
-              Upload one file to extract clean output, or upload two files to generate a redline,
-              review the changes, and export the result.
+              Use one DOCX for extract tasks or two DOCX files for redline compare. The product is
+              built around a short path: upload, run, review, export.
             </p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="mt-6 flex flex-wrap gap-2">
               {[
-                { step: "1", title: "Choose extract or compare" },
-                { step: "2", title: "Use your DOCX or a sample" },
-                { step: "3", title: "Download or inspect the output" },
+                "1. Pick extract or compare",
+                "2. Use your DOCX or a sample",
+                "3. Review and export",
               ].map((item) => (
-                <div
-                  key={item.step}
-                  className="rounded-3xl border border-[color:var(--line)] bg-white/70 px-4 py-4"
+                <span
+                  key={item}
+                  className="rounded-full border border-[color:var(--line)] bg-white/75 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
                 >
-                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-[color:var(--accent-2)]">
-                    Step {item.step}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-[color:var(--ink)]">
-                    {item.title}
-                  </p>
-                </div>
+                  {item}
+                </span>
               ))}
             </div>
           </div>
@@ -83,7 +78,7 @@ export default function Home() {
             href={card.href}
           >
             <p className="font-mono text-xs uppercase tracking-[0.26em] text-[color:var(--accent)]">
-              Workflow
+              Direct route
             </p>
             <h2 className="mt-3 text-2xl leading-tight text-[color:var(--ink)]">{card.title}</h2>
             <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
@@ -96,52 +91,35 @@ export default function Home() {
       <section className="grid gap-5 pt-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[30px] border border-[color:var(--line)] bg-[color:var(--surface-elevated)] p-6 shadow-[0_24px_60px_rgba(71,48,29,0.08)]">
           <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-            Included in v1
+            What the tool covers
           </p>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--ink-muted)]">
-            The product is centered on a short path: upload, run, review. Everything else supports
-            that flow.
-          </p>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <div className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-5">
-              <h3 className="text-xl text-[color:var(--ink)]">DOCX compare</h3>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-                Produce a redline DOCX, inspect inserts and deletions, and accept or reject all
-                changes from the browser.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-5">
-              <h3 className="text-xl text-[color:var(--ink)]">Comment extraction</h3>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-                Export threaded comments with replies, authors, timestamps, quoted text, and
-                resolved state.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-5">
-              <h3 className="text-xl text-[color:var(--ink)]">HTML and Markdown</h3>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-                Convert Word output into clean HTML or Markdown with list normalization and style
-                maps.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-5">
-              <h3 className="text-xl text-[color:var(--ink)]">Content controls</h3>
-              <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-                Inspect structured document tags and safely replace tagged text while preserving
-                surrounding formatting.
-              </p>
-            </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {[
+              "Compare two DOCX files and export a redline DOCX.",
+              "Accept or reject tracked changes one by one or in bulk.",
+              "Extract comments with replies, timestamps, and resolved state.",
+              "Convert DOCX to clean HTML or Markdown with style maps.",
+              "Inspect headers, footers, footnotes, endnotes, and assets.",
+              "Replace content-control text safely in the browser.",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-3xl border border-[color:var(--line)] bg-white/80 px-4 py-4 text-sm leading-7 text-[color:var(--ink-muted)]"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="rounded-[30px] border border-[color:var(--line)] bg-[linear-gradient(160deg,rgba(22,74,104,0.92),rgba(9,34,52,0.96))] p-6 text-white shadow-[0_30px_80px_rgba(15,33,48,0.35)]">
           <p className="font-mono text-xs uppercase tracking-[0.28em] text-white/65">
-            Start fast
+            Best first clicks
           </p>
           <div className="mt-4 space-y-4 text-sm leading-7 text-white/80">
-            <p>Use the contract sample to test compare and redline output in one click.</p>
-            <p>Use the manuscript sample to verify comment threads, replies, and resolved state.</p>
-            <p>Use the illustrated sample to test HTML, Markdown, assets, and document parts.</p>
+            <p>Use the contract sample for redline compare and tracked-change actions.</p>
+            <p>Use the manuscript sample for comments, replies, and resolved-state checks.</p>
+            <p>Use the illustrated sample for HTML, Markdown, assets, and document parts.</p>
           </div>
         </div>
       </section>
