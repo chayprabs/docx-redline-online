@@ -18,6 +18,8 @@ export default function DocxToMarkdownPage() {
       extractFileHelper="Use one DOCX to generate Markdown and cross-check the rendered structure."
       extractRunLabel="Generate Markdown"
       extractLoadingLabel="Generating Markdown..."
+      extractOutputTitle="Markdown results"
+      extractOutputDescription="Start in Markdown, then switch into HTML or assets when you need to verify the document structure."
       preferredSampleId="generic-images"
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."

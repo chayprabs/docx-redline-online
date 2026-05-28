@@ -18,6 +18,8 @@ export default function DocxToHtmlPage() {
       extractFileHelper="Use one DOCX to generate HTML, inspect assets, and review document parts."
       extractRunLabel="Generate HTML"
       extractLoadingLabel="Generating HTML..."
+      extractOutputTitle="HTML results"
+      extractOutputDescription="Start in HTML, then switch into assets and document parts when you need to inspect the source structure."
       preferredSampleId="generic-images"
       heroEyebrow="DOCX to HTML"
       heroTitle="Convert DOCX into clean HTML with images and structure intact."

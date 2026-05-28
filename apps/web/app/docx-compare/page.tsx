@@ -20,6 +20,8 @@ export default function DocxComparePage() {
       compareRevisedHelper="Add the newer version to generate the redline and side-by-side diff."
       compareRunLabel="Generate redline"
       compareLoadingLabel="Generating redline..."
+      compareOutputTitle="Redline results"
+      compareOutputDescription="Start with the exported redline, then move into the HTML diff or change list for review."
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."

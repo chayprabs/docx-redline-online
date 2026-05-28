@@ -431,6 +431,8 @@ export function PlaygroundShell({
   extractFileHelper = "One file unlocks conversions, comments, tracked changes, controls, assets, and document parts.",
   extractRunLabel = "Run extract",
   extractLoadingLabel = "Running extract...",
+  extractOutputTitle = "Extract output",
+  extractOutputDescription = "Start with HTML or Markdown, then switch into comments, tracked changes, controls, assets, and document parts.",
   extractReadyMessage = "Ready to run on the selected DOCX.",
   extractIdleMessage = "Choose one DOCX or load a sample to enable extract.",
   compareOriginalTitle = "Original version",
@@ -439,6 +441,8 @@ export function PlaygroundShell({
   compareRevisedHelper = "Add the newer draft to generate a redline and side-by-side HTML diff.",
   compareRunLabel = "Run compare",
   compareLoadingLabel = "Comparing...",
+  compareOutputTitle = "Compare outputs",
+  compareOutputDescription = "Download the redline DOCX, inspect the HTML diff, or work through the change list.",
   preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
@@ -462,6 +466,8 @@ export function PlaygroundShell({
   extractFileHelper?: string;
   extractRunLabel?: string;
   extractLoadingLabel?: string;
+  extractOutputTitle?: string;
+  extractOutputDescription?: string;
   extractReadyMessage?: string;
   extractIdleMessage?: string;
   compareOriginalTitle?: string;
@@ -470,6 +476,8 @@ export function PlaygroundShell({
   compareRevisedHelper?: string;
   compareRunLabel?: string;
   compareLoadingLabel?: string;
+  compareOutputTitle?: string;
+  compareOutputDescription?: string;
   preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
@@ -1343,11 +1351,10 @@ export function PlaygroundShell({
                 <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-                      Extract output
+                      {extractOutputTitle}
                     </p>
                     <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
-                      Start with HTML or Markdown, then switch into comments, tracked changes,
-                      controls, assets, and document parts.
+                      {extractOutputDescription}
                     </p>
                   </div>
                   <MetricPills items={extractSummary} />
@@ -1406,11 +1413,10 @@ export function PlaygroundShell({
                 <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-                      Compare outputs
+                      {compareOutputTitle}
                     </p>
                     <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
-                      Download the redline DOCX, inspect the HTML diff, or work through the
-                      change list.
+                      {compareOutputDescription}
                     </p>
                   </div>
                   <MetricPills items={compareSummary} />

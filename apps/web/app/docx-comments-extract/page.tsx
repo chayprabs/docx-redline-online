@@ -19,6 +19,8 @@ export default function DocxCommentsExtractPage() {
       extractFileHelper="Use one DOCX to extract comment threads, replies, timestamps, and resolved state."
       extractRunLabel="Extract comments"
       extractLoadingLabel="Extracting comments..."
+      extractOutputTitle="Comment results"
+      extractOutputDescription="Start in comments, then use Markdown export when you need a portable review summary."
       extractOptionsTitle="Comment extraction"
       extractOptionsDescription="Run one DOCX to extract comment threads, replies, quoted text, authors, timestamps, and resolved state."
       extractReadyMessage="Ready to extract comments from the selected DOCX."
