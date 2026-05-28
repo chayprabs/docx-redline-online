@@ -41,6 +41,12 @@ Branch: `cursor/docx-redline-build`
 - Extract workflow runs end to end and renders result panes in the browser.
 - Compare workflow runs end to end and renders redline output in the browser.
 
+### Acceptance evidence now codified
+
+- `apps/worker/tests/test_acceptance.py::test_acceptance_a1_contract_redline_matches_structural_baseline` verifies the shipped contract sample produces structural insertions, deletions, and the added confidentiality paragraph in the generated redline.
+- `apps/worker/tests/test_acceptance.py::test_acceptance_a2_conversion_preserves_formatting` verifies the shipped generic sample preserves heading, bold, italic, list items, and image extraction across HTML and Markdown conversions.
+- `apps/worker/tests/test_acceptance.py::test_acceptance_a3_comments_extract_correctly` verifies the shipped manuscript comments sample preserves author, reply, resolved state, quoted text, and Markdown export content.
+
 ## Remaining Section 23 Gaps
 
 - Hosted deployment evidence is not collected yet.

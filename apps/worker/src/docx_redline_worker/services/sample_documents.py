@@ -36,7 +36,12 @@ def build_contract_redline_sample(variant: str) -> bytes:
 def build_generic_images_sample() -> bytes:
     document = Document()
     document.add_heading("Illustrated Brief", level=1)
-    document.add_paragraph("This fixture keeps bold and italic formatting for conversion.")
+    paragraph = document.add_paragraph()
+    paragraph.add_run("This fixture keeps ")
+    paragraph.add_run("bold").bold = True
+    paragraph.add_run(" and ")
+    paragraph.add_run("italic").italic = True
+    paragraph.add_run(" formatting for conversion.")
     document.add_paragraph("First bullet", style="List Bullet")
     document.add_paragraph("Second bullet", style="List Bullet")
 
