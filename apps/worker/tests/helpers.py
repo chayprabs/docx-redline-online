@@ -234,3 +234,54 @@ def create_tracked_changes_fixture(target: Path) -> Path:
 
     target.write_bytes(output.getvalue())
     return target
+
+
+def create_content_controls_fixture(target: Path) -> Path:
+    document = Document()
+    document.add_paragraph("Placeholder host")
+    document.save(target)
+
+    with zipfile.ZipFile(target, "r") as archive:
+        files = {name: archive.read(name) for name in archive.namelist()}
+
+    root = etree.fromstring(files["word/document.xml"])
+    paragraph = root.xpath("//w:body/w:p", namespaces={
+        "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    })[0]
+    for child in list(paragraph):
+        paragraph.remove(child)
+
+    sdt = etree.SubElement(paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}sdt")
+    sdt_pr = etree.SubElement(sdt, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}sdtPr")
+    alias = etree.SubElement(sdt_pr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}alias")
+    alias.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val", "Client Name")
+    tag = etree.SubElement(sdt_pr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}tag")
+    tag.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val", "client_name")
+    identifier = etree.SubElement(sdt_pr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id")
+    identifier.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val", "101")
+    etree.SubElement(sdt_pr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}text")
+
+    sdt_content = etree.SubElement(sdt, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}sdtContent")
+    run_one = etree.SubElement(sdt_content, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    run_one_properties = etree.SubElement(run_one, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rPr")
+    etree.SubElement(run_one_properties, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}b")
+    text_one = etree.SubElement(run_one, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    text_one.text = "Acme"
+    run_two = etree.SubElement(sdt_content, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    text_two = etree.SubElement(run_two, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    text_two.text = " Corp"
+
+    files["word/document.xml"] = etree.tostring(
+        root,
+        xml_declaration=True,
+        encoding="UTF-8",
+        standalone="yes",
+    )
+
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        for name, data in files.items():
+            archive.writestr(name, data)
+
+    target.write_bytes(output.getvalue())
+    return target

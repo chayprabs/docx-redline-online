@@ -68,4 +68,21 @@ class RedlineMutationResponse(BaseModel):
     docx_base64: str
 
 
+class ContentControlRecord(BaseModel):
+    id: str
+    title: str
+    tag: str
+    control_type: str
+    text: str
+
+
+class ContentControlsResponse(BaseModel):
+    controls: list[ContentControlRecord]
+
+
+class ReplaceResponse(BaseModel):
+    controls: list[ContentControlRecord]
+    docx_base64: str
+
+
 DocxCommentRecord.model_rebuild()

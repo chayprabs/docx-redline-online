@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from .config import settings
 from .routers.comments import router as comments_router
+from .routers.content_controls import router as content_controls_router
 from .routers.convert import router as conversion_router
 from .routers.tracked import router as tracked_router
 
@@ -13,6 +14,7 @@ app = FastAPI(
 app.include_router(conversion_router)
 app.include_router(comments_router)
 app.include_router(tracked_router)
+app.include_router(content_controls_router)
 
 
 @app.get("/health")
