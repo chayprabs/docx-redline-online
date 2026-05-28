@@ -76,6 +76,11 @@ export interface ContentControlsResult {
   controls: ContentControlRecord[];
 }
 
+export interface ReplaceResponse {
+  controls: ContentControlRecord[];
+  docx_base64: string;
+}
+
 export interface NamedContent {
   name: string;
   text: string;

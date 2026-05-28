@@ -12,6 +12,7 @@ import type {
   DocumentElementsResult,
   HtmlConversionResult,
   MarkdownConversionResult,
+  ReplaceResponse,
   SampleDocument,
   TrackedChange,
   TrackedChangesResult,
@@ -100,6 +101,10 @@ function createInitialCompareState(): CompareState {
     tracked: null,
     redlineFile: null,
   };
+}
+
+function controlDraftMap(controls: ContentControlsResult["controls"]) {
+  return Object.fromEntries(controls.map((control) => [control.id, control.text]));
 }
 
 function decodeBase64Docx(base64Value: string, name: string) {
@@ -454,14 +459,24 @@ export function PlaygroundShell({
   const [extractLoading, setExtractLoading] = useState(false);
   const [compareLoading, setCompareLoading] = useState(false);
   const [mutationLoading, setMutationLoading] = useState(false);
+  const [replaceLoading, setReplaceLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const pathname = usePathname();
+  const [controlDrafts, setControlDrafts] = useState<Record<string, string>>({});
   const extractReady = Boolean(extractFile);
   const compareReady = Boolean(originalFile && revisedFile);
 
-  const extractSummary = extractState.html
+  const hasExtractResults = Boolean(
+    extractState.html ||
+      extractState.markdown ||
+      extractState.comments ||
+      extractState.tracked ||
+      extractState.controls ||
+      extractState.elements,
+  );
+  const extractSummary = hasExtractResults
     ? [
-        formatCount(extractState.html.images.length, "image"),
+        formatCount(extractState.html?.images.length ?? 0, "image"),
         formatCount(extractState.comments?.comments.length ?? 0, "thread"),
         formatCount(extractState.tracked?.changes.length ?? 0, "change"),
         formatCount(extractState.controls?.controls.length ?? 0, "control"),
@@ -475,6 +490,24 @@ export function PlaygroundShell({
         compareState.redlineFile ? "redline ready" : "redline pending",
       ]
     : [];
+  const changedControlValues = extractState.controls?.controls
+    ? Object.fromEntries(
+        extractState.controls.controls
+          .map((control) => [control.id, controlDrafts[control.id] ?? control.text, control.text] as const)
+          .filter(([, nextValue, originalValue]) => nextValue !== originalValue)
+          .map(([id, nextValue]) => [id, nextValue]),
+      )
+    : {};
+  const controlChangesCount = Object.keys(changedControlValues).length;
+  const extractTabStatus: Record<ExtractTab, boolean> = {
+    HTML: Boolean(extractState.html),
+    Markdown: Boolean(extractState.markdown),
+    Comments: Boolean(extractState.comments),
+    Tracked: Boolean(extractState.tracked),
+    Controls: Boolean(extractState.controls),
+    Assets: Boolean(extractState.html || extractState.elements),
+    Elements: Boolean(extractState.elements),
+  };
   const orderedSamples = [...samples].sort((left, right) => {
     if (!preferredSampleId) {
       return 0;
@@ -524,6 +557,7 @@ export function PlaygroundShell({
     setErrorMessage(null);
     setExtractFile(file);
     setExtractState(createInitialExtractState());
+    setControlDrafts({});
   }
 
   function handleOriginalFileChange(file: File | null) {
@@ -542,6 +576,7 @@ export function PlaygroundShell({
     setErrorMessage(null);
     setExtractFile(null);
     setExtractState(createInitialExtractState());
+    setControlDrafts({});
   }
 
   function resetCompareWorkspace() {
@@ -573,6 +608,7 @@ export function PlaygroundShell({
           setMode("extract");
           setExtractFile(file);
           setExtractState(createInitialExtractState());
+          setControlDrafts({});
         });
       }
     } catch (error) {
@@ -635,6 +671,7 @@ export function PlaygroundShell({
           controls: controlsResult,
           elements: elementsResult,
         });
+        setControlDrafts(controlDraftMap(controlsResult.controls));
         setExtractTab("HTML");
       });
     } catch (error) {
@@ -720,12 +757,59 @@ export function PlaygroundShell({
     }
   }
 
+  async function applyControlReplacements() {
+    if (!extractFile || !extractState.controls?.controls.length || !controlChangesCount) {
+      return;
+    }
+
+    setErrorMessage(null);
+    setReplaceLoading(true);
+
+    try {
+      const formData = buildSingleFileForm(extractFile);
+      formData.append("replacements", JSON.stringify(changedControlValues));
+      const response = await readJson<ReplaceResponse>("/v1/replace", {
+        method: "POST",
+        body: formData,
+      });
+      const nextFileName = extractFile.name.replace(/\.docx$/i, "") || "docx-redline-controls";
+      const nextFile = decodeBase64Docx(response.docx_base64, `${nextFileName}-updated.docx`);
+
+      startTransition(() => {
+        setExtractFile(nextFile);
+        setExtractState({
+          html: null,
+          markdown: null,
+          comments: null,
+          tracked: null,
+          controls: { controls: response.controls },
+          elements: null,
+        });
+        setControlDrafts(controlDraftMap(response.controls));
+        setExtractTab("Controls");
+      });
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Content-control replacement failed.");
+    } finally {
+      setReplaceLoading(false);
+    }
+  }
+
   function renderExtractContent() {
-    if (!extractState.html) {
+    if (!hasExtractResults) {
       return (
         <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
           Run the extract workflow to populate HTML, Markdown, comments, tracked changes,
           content controls, assets, and document-element viewers.
+        </p>
+      );
+    }
+
+    if (!extractTabStatus[extractTab]) {
+      return (
+        <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
+          This tab reflects the last full extract run. Re-run extract on the current DOCX to refresh
+          {extractTab === "Assets" ? " assets and embedded objects." : ` ${extractTab.toLowerCase()} output.`}
         </p>
       );
     }
@@ -735,7 +819,7 @@ export function PlaygroundShell({
         return (
           <div
             className="prose max-w-none text-sm leading-7 text-[color:var(--ink)]"
-            dangerouslySetInnerHTML={{ __html: extractState.html.html }}
+            dangerouslySetInnerHTML={{ __html: extractState.html?.html ?? "" }}
           />
         );
       case "Markdown":
@@ -755,6 +839,12 @@ export function PlaygroundShell({
       case "Controls":
         return extractState.controls?.controls.length ? (
           <div className="space-y-3">
+            {!extractState.html ? (
+              <div className="rounded-2xl border border-[color:var(--line)] bg-white/70 px-4 py-3 text-sm text-[color:var(--ink-muted)]">
+                Content controls reflect the latest replacement state. Re-run extract if you want
+                refreshed HTML, Markdown, comments, and other tabs from the updated DOCX.
+              </div>
+            ) : null}
             {extractState.controls.controls.map((control) => (
               <article
                 key={control.id}
@@ -768,7 +858,22 @@ export function PlaygroundShell({
                 <p className="mt-3 text-sm font-semibold text-[color:var(--ink)]">
                   {control.title || "Untitled control"}
                 </p>
-                <p className="mt-2 text-sm text-[color:var(--ink-muted)]">{control.text || "(empty)"}</p>
+                <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
+                  Current value: {control.text || "(empty)"}
+                </p>
+                <label className="mt-3 block text-sm text-[color:var(--ink-muted)]">
+                  <span className="font-medium text-[color:var(--ink)]">Replacement text</span>
+                  <textarea
+                    className="mt-2 min-h-24 w-full rounded-2xl border border-[color:var(--line)] bg-white px-4 py-3 text-sm text-[color:var(--ink)]"
+                    onChange={(event) =>
+                      setControlDrafts((current) => ({
+                        ...current,
+                        [control.id]: event.target.value,
+                      }))
+                    }
+                    value={controlDrafts[control.id] ?? control.text}
+                  />
+                </label>
               </article>
             ))}
           </div>
@@ -778,7 +883,7 @@ export function PlaygroundShell({
       case "Assets":
         return (
           <div className="grid gap-3 sm:grid-cols-2">
-            {extractState.html.images.map((image) => (
+            {(extractState.html?.images ?? []).map((image) => (
               <article
                 key={image.name}
                 className="rounded-2xl border border-[color:var(--line)] bg-white/80 p-4"
@@ -852,7 +957,11 @@ export function PlaygroundShell({
   }
 
   function renderExtractActions() {
-    if (!extractState.html) {
+    if (!hasExtractResults) {
+      return null;
+    }
+
+    if (!extractTabStatus[extractTab]) {
       return null;
     }
 
@@ -908,6 +1017,28 @@ export function PlaygroundShell({
             type="button"
           >
             Download Markdown
+          </button>
+        </div>
+      );
+    }
+
+    if (extractTab === "Controls" && extractState.controls?.controls.length && extractFile) {
+      return (
+        <div className="flex flex-wrap gap-2">
+          <button
+            className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
+            disabled={!controlChangesCount || replaceLoading}
+            onClick={() => void applyControlReplacements()}
+            type="button"
+          >
+            {replaceLoading ? "Applying changes..." : "Apply replacements"}
+          </button>
+          <button
+            className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)]"
+            onClick={() => downloadBlob(extractFile, extractFile.name)}
+            type="button"
+          >
+            Download current DOCX
           </button>
         </div>
       );
