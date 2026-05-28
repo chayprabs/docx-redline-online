@@ -216,15 +216,23 @@ function FileSlot({
         <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
           {title}
         </p>
+        <div className="mt-4 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] text-[color:var(--ink-muted)]">
+          <span className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1">
+            {file ? "Loaded" : "Awaiting file"}
+          </span>
+          <span className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1">
+            DOCX only
+          </span>
+        </div>
         <h3 className="mt-4 text-3xl leading-tight text-[color:var(--ink)]">
-          {file ? file.name : "Drop DOCX or click to browse."}
+          {file ? file.name : "Add a DOCX file"}
         </h3>
         <p className="mt-4 max-w-md text-base leading-7 text-[color:var(--ink-muted)]">
           {file ? `${formatBytes(file.size)} ready for processing.` : helper}
         </p>
       </div>
       <div className="mt-8 flex items-center justify-between gap-3 text-sm text-[color:var(--ink-muted)]">
-        <span>{file ? "Replace file or keep current selection" : "Drag, browse, or use a sample"}</span>
+        <span>{file ? "Click here to replace this DOCX." : "Click to browse, drag a DOCX here, or use a sample."}</span>
         <div className="flex items-center gap-2">
           {file ? (
             <button
