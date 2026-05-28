@@ -424,6 +424,7 @@ export function PlaygroundShell({
   initialCompareTab = "Redline",
   visibleExtractTabs = extractTabs,
   visibleCompareTabs = compareTabs,
+  visibleSampleIds,
   showModeToggle = true,
   showExtractConversionControls = true,
   extractOptionsTitle = "Conversion controls",
@@ -460,6 +461,7 @@ export function PlaygroundShell({
   initialCompareTab?: CompareTab;
   visibleExtractTabs?: readonly ExtractTab[];
   visibleCompareTabs?: readonly CompareTab[];
+  visibleSampleIds?: readonly string[];
   showModeToggle?: boolean;
   showExtractConversionControls?: boolean;
   extractOptionsTitle?: string;
@@ -552,7 +554,10 @@ export function PlaygroundShell({
     Assets: Boolean(extractState.html || extractState.elements),
     Elements: Boolean(extractState.elements),
   };
-  const orderedSamples = [...samples].sort((left, right) => {
+  const scopedSamples = visibleSampleIds?.length
+    ? samples.filter((sample) => visibleSampleIds.includes(sample.id))
+    : samples;
+  const orderedSamples = [...scopedSamples].sort((left, right) => {
     if (!preferredSampleId) {
       return 0;
     }

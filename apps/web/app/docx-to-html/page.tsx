@@ -14,6 +14,7 @@ export default function DocxToHtmlPage() {
       initialMode="extract"
       initialExtractTab="HTML"
       visibleExtractTabs={["HTML", "Assets", "Elements"]}
+      visibleSampleIds={["generic-images"]}
       showModeToggle={false}
       extractFileTitle="HTML source DOCX"
       extractFileHelper="Use one DOCX to generate HTML, inspect assets, and review document parts."

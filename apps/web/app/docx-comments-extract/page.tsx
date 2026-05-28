@@ -14,6 +14,7 @@ export default function DocxCommentsExtractPage() {
       initialMode="extract"
       initialExtractTab="Comments"
       visibleExtractTabs={["Comments", "Markdown"]}
+      visibleSampleIds={["manuscript-comments"]}
       showModeToggle={false}
       showExtractConversionControls={false}
       extractFileTitle="Comment source DOCX"
