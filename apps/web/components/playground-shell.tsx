@@ -188,6 +188,10 @@ function downloadBlob(blob: Blob, fileName: string) {
   URL.revokeObjectURL(objectUrl);
 }
 
+function downloadText(contents: string, fileName: string, contentType = "text/plain;charset=utf-8") {
+  downloadBlob(new Blob([contents], { type: contentType }), fileName);
+}
+
 function FileSlot({
   title,
   helper,
@@ -847,6 +851,71 @@ export function PlaygroundShell({
     }
   }
 
+  function renderExtractActions() {
+    if (!extractState.html) {
+      return null;
+    }
+
+    if (extractTab === "HTML" && extractState.html) {
+      return (
+        <button
+          className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)]"
+          onClick={() => downloadText(extractState.html!.html, "docx-redline-export.html", "text/html;charset=utf-8")}
+          type="button"
+        >
+          Download HTML
+        </button>
+      );
+    }
+
+    if (extractTab === "Markdown" && extractState.markdown) {
+      return (
+        <button
+          className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)]"
+          onClick={() => downloadText(extractState.markdown!.markdown, "docx-redline-export.md", "text/markdown;charset=utf-8")}
+          type="button"
+        >
+          Download Markdown
+        </button>
+      );
+    }
+
+    if (extractTab === "Comments" && extractState.comments) {
+      return (
+        <div className="flex flex-wrap gap-2">
+          <button
+            className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)]"
+            onClick={() =>
+              downloadText(
+                JSON.stringify(extractState.comments!.comments, null, 2),
+                "docx-redline-comments.json",
+                "application/json;charset=utf-8",
+              )
+            }
+            type="button"
+          >
+            Download JSON
+          </button>
+          <button
+            className="rounded-full border border-[color:var(--line)] bg-white/70 px-4 py-2 text-sm text-[color:var(--ink-muted)]"
+            onClick={() =>
+              downloadText(
+                extractState.comments!.markdown,
+                "docx-redline-comments.md",
+                "text/markdown;charset=utf-8",
+              )
+            }
+            type="button"
+          >
+            Download Markdown
+          </button>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
   function renderCompareContent() {
     if (!compareState.compare) {
       return (
@@ -1122,6 +1191,7 @@ export function PlaygroundShell({
                 <div className="mt-4">
                   <TabStrip active={extractTab} onSelect={setExtractTab} tabs={extractTabs} />
                 </div>
+                <div className="mt-4 flex flex-wrap gap-2">{renderExtractActions()}</div>
                 <div className="mt-5">{renderExtractContent()}</div>
               </div>
             </>
