@@ -499,6 +499,19 @@ export function PlaygroundShell({
     setCompareState(createInitialCompareState());
   }
 
+  function resetExtractWorkspace() {
+    setErrorMessage(null);
+    setExtractFile(null);
+    setExtractState(createInitialExtractState());
+  }
+
+  function resetCompareWorkspace() {
+    setErrorMessage(null);
+    setOriginalFile(null);
+    setRevisedFile(null);
+    setCompareState(createInitialCompareState());
+  }
+
   async function handleSampleLoad(sample: SampleDocument) {
     setErrorMessage(null);
     setSampleLoadingId(sample.id);
@@ -1020,14 +1033,24 @@ export function PlaygroundShell({
                       Normalize list output for cleaner HTML and Markdown exports.
                     </span>
                   </label>
-                  <button
-                    className="mt-5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
-                    disabled={extractLoading || !extractReady}
-                    onClick={() => void handleExtractRun()}
-                    type="button"
-                  >
-                    {extractLoading ? "Running extract..." : "Run extract"}
-                  </button>
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <button
+                      className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
+                      disabled={extractLoading || !extractReady}
+                      onClick={() => void handleExtractRun()}
+                      type="button"
+                    >
+                      {extractLoading ? "Running extract..." : "Run extract"}
+                    </button>
+                    <button
+                      className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
+                      disabled={!extractFile && !extractState.html}
+                      onClick={resetExtractWorkspace}
+                      type="button"
+                    >
+                      Clear workspace
+                    </button>
+                  </div>
                   <p className="mt-3 text-sm text-[color:var(--ink-muted)]">
                     {extractReady
                       ? "Ready to run on the selected DOCX."
@@ -1082,6 +1105,14 @@ export function PlaygroundShell({
                   type="button"
                 >
                   {compareLoading ? "Comparing..." : "Run compare"}
+                </button>
+                <button
+                  className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
+                  disabled={(!originalFile && !revisedFile && !compareState.compare) || compareLoading}
+                  onClick={resetCompareWorkspace}
+                  type="button"
+                >
+                  Clear workspace
                 </button>
                 <span className="text-sm text-[color:var(--ink-muted)]">
                   {compareReady
