@@ -1106,12 +1106,18 @@ export function PlaygroundShell({
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent-2)]">
               Sample fixtures
             </p>
+            <p className="mt-3 text-sm leading-6 text-[color:var(--ink-muted)]">
+              Start with a fixture when you want to test the workflow first and upload your own
+              file second.
+            </p>
             <div className="mt-5 space-y-4">
               {samples.map((sample) => (
                 <SampleCard
                   key={sample.id}
                   title={sample.title}
                   description={sample.description}
+                  eyebrow="Built-in sample"
+                  meta={sample.recommended_mode === "compare" ? "Two-file flow" : "One-file flow"}
                   accent={
                     sample.recommended_mode === "compare"
                       ? "linear-gradient(90deg, #9f2a1d, #cf6a43)"
@@ -1119,11 +1125,13 @@ export function PlaygroundShell({
                   }
                   footer={
                     <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono text-xs uppercase tracking-[0.22em] text-[color:var(--ink-muted)]">
-                        {sample.recommended_mode}
+                      <span className="text-sm text-[color:var(--ink-muted)]">
+                        {sample.recommended_mode === "compare"
+                          ? "Loads original and revised documents."
+                          : "Loads one document into extract mode."}
                       </span>
                       <button
-                        className="rounded-full border border-[color:var(--line)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)] disabled:opacity-50"
+                        className="rounded-full bg-[color:var(--surface)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink)] shadow-[0_8px_20px_rgba(71,48,29,0.08)] disabled:opacity-50"
                         disabled={sampleLoadingId === sample.id}
                         onClick={() => void handleSampleLoad(sample)}
                         type="button"
