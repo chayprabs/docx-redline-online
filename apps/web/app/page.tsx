@@ -2,34 +2,6 @@ import Link from "next/link";
 
 import { PlaygroundLauncher } from "../components/playground-launcher";
 
-const workflowCards = [
-  {
-    href: "/docx-redline",
-    title: "Redline two DOCX files",
-    description: "Compare two documents, inspect tracked changes, and export the redline DOCX.",
-  },
-  {
-    href: "/docx-compare",
-    title: "Inspect the compare view",
-    description: "Open the side-by-side diff route directly when review is the first task.",
-  },
-  {
-    href: "/docx-comments-extract",
-    title: "Extract comments",
-    description: "Pull threads, replies, timestamps, and resolved state into JSON or Markdown.",
-  },
-  {
-    href: "/docx-to-html",
-    title: "Convert to HTML",
-    description: "Generate clean HTML with images, style-map support, and list normalization.",
-  },
-  {
-    href: "/docx-to-markdown",
-    title: "Convert to Markdown",
-    description: "Keep headings and lists cleaner with style maps and list-normalization controls.",
-  },
-];
-
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 pb-16 pt-6 sm:px-8 lg:px-10">
@@ -84,24 +56,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-      </section>
-
-      <section className="grid gap-4 pt-8 md:grid-cols-2 xl:grid-cols-5">
-        {workflowCards.map((card) => (
-          <Link
-            key={card.href}
-            className="rounded-[28px] border border-[color:var(--line)] bg-[color:var(--surface-elevated)] p-6 shadow-[0_20px_50px_rgba(71,48,29,0.08)] transition-transform hover:-translate-y-1"
-            href={card.href}
-          >
-            <p className="font-mono text-xs uppercase tracking-[0.26em] text-[color:var(--accent)]">
-              Direct route
-            </p>
-            <h2 className="mt-3 text-2xl leading-tight text-[color:var(--ink)]">{card.title}</h2>
-            <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-              {card.description}
-            </p>
-          </Link>
-        ))}
       </section>
 
       <section className="grid gap-5 pt-8 lg:grid-cols-[1.1fr_0.9fr]">
