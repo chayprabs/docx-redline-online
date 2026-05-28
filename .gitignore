@@ -27,6 +27,7 @@ __pycache__/
 .*.log
 .DS_Store
 *.tsbuildinfo
+docs/qc-artifacts/
 .env
 .env.local
 .env.*.local

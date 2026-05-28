@@ -13,6 +13,17 @@ Branch: `cursor/docx-redline-build`
 - `pnpm build` passes.
 - `apps/worker`: `PYTHONPATH=src pytest` passes.
 
+### Qualification tooling now in repo
+
+- `pnpm verify:lighthouse -- --url <web-url> --output <json-path>` writes a Lighthouse JSON report and fails when any Section 23 category scores below 95.
+- `pnpm verify:compare -- --base-url <worker-url> --iterations 7 --output <json-path>` generates synthetic ~1 MB original/revised DOCX fixtures and reports min/median/mean/p95 compare latency.
+
+### Current local evidence
+
+- Local Lighthouse run against `http://127.0.0.1:4310` produced: Performance 38, Accessibility 100, Best Practices 100, SEO 100.
+- Local compare smoke benchmark against `http://127.0.0.1:8010` on a ~64 KB synthetic pair completed in 5661.98 ms for a single run.
+- The required 1 MB p95 compare benchmark is not yet passing evidence; performance optimization is still required before qualification.
+
 ### Functional slices implemented
 
 - F1/F2: DOCX upload plumbing plus HTML, Markdown, image extraction, and list normalization.

@@ -68,6 +68,13 @@ pnpm build
 cd apps/worker && python -m pytest
 ```
 
+## Qualification Commands
+
+```bash
+pnpm verify:lighthouse -- --url http://127.0.0.1:4310 --output docs/qc-artifacts/lighthouse/local.report.json
+pnpm verify:compare -- --base-url http://127.0.0.1:8010 --iterations 7 --output docs/qc-artifacts/compare/local-benchmark.json
+```
+
 ## Qualification Tracking
 
 - Release gate: `RELEASE_QUALIFICATION_CHECKLIST.md` Section 23
