@@ -265,17 +265,19 @@ function TabStrip<T extends string>({
   tabs,
   active,
   onSelect,
+  availability,
 }: {
   tabs: readonly T[];
   active: T;
   onSelect: (tab: T) => void;
+  availability?: Partial<Record<T, boolean>>;
 }) {
   return (
     <div className="flex flex-wrap gap-2">
       {tabs.map((tab) => (
         <button
           key={tab}
-          className={`rounded-full border px-4 py-2 text-sm ${
+          className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm ${
             active === tab
               ? "border-transparent bg-[color:var(--accent)] text-white shadow-[0_12px_30px_rgba(159,42,29,0.25)]"
               : "border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)]"
@@ -283,7 +285,19 @@ function TabStrip<T extends string>({
           onClick={() => onSelect(tab)}
           type="button"
         >
-          {tab}
+          <span>{tab}</span>
+          <span
+            aria-hidden="true"
+            className={`h-2.5 w-2.5 rounded-full ${
+              availability?.[tab]
+                ? active === tab
+                  ? "bg-white/90"
+                  : "bg-[color:var(--accent)]"
+                : active === tab
+                  ? "bg-white/40"
+                  : "bg-[color:var(--line)]"
+            }`}
+          />
         </button>
       ))}
     </div>
@@ -587,6 +601,11 @@ export function PlaygroundShell({
     Controls: Boolean(extractState.controls),
     Assets: Boolean(extractState.html || extractState.elements),
     Elements: Boolean(extractState.elements),
+  };
+  const compareTabStatus: Record<CompareTab, boolean> = {
+    Redline: Boolean(compareState.compare),
+    Diff: Boolean(compareState.compare?.panes.length),
+    Changes: Boolean(compareState.tracked?.changes.length || compareState.compare?.changes.length),
   };
   const scopedSamples = visibleSampleIds?.length
     ? samples.filter((sample) => visibleSampleIds.includes(sample.id))
@@ -1466,7 +1485,12 @@ export function PlaygroundShell({
                   <MetricPills items={extractSummary} />
                 </div>
                 <div className="mt-4">
-                  <TabStrip active={extractTab} onSelect={setExtractTab} tabs={visibleExtractTabs} />
+                  <TabStrip
+                    active={extractTab}
+                    availability={extractTabStatus}
+                    onSelect={setExtractTab}
+                    tabs={visibleExtractTabs}
+                  />
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">{renderExtractActions()}</div>
                 <div className="mt-5">{renderExtractContent()}</div>
@@ -1554,7 +1578,12 @@ export function PlaygroundShell({
                   <MetricPills items={compareSummary} />
                 </div>
                 <div className="mt-4">
-                  <TabStrip active={compareTab} onSelect={setCompareTab} tabs={visibleCompareTabs} />
+                  <TabStrip
+                    active={compareTab}
+                    availability={compareTabStatus}
+                    onSelect={setCompareTab}
+                    tabs={visibleCompareTabs}
+                  />
                 </div>
                 <div className="mt-5">{renderCompareContent()}</div>
               </div>
