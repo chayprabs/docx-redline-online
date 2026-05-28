@@ -273,6 +273,25 @@ function Surface({
   );
 }
 
+function MetricPills({ items }: { items: string[] }) {
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span
+          key={item}
+          className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function RenderComments({
   comments,
   depth = 0,
@@ -916,7 +935,7 @@ export function PlaygroundShell({
               <div className="mt-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
                 <FileSlot
                   title="Primary file"
-                  helper="One file unlocks HTML, Markdown, comments, tracked changes, controls, assets, and document-part viewers."
+                  helper="One file unlocks conversions, comments, tracked changes, controls, assets, and document parts."
                   file={extractFile}
                   onChange={(file) => setExtractFile(file)}
                   onClear={() => setExtractFile(null)}
@@ -967,18 +986,7 @@ export function PlaygroundShell({
                       changes, assets, and document parts.
                     </p>
                   </div>
-                  {extractSummary.length ? (
-                    <div className="flex flex-wrap gap-2">
-                      {extractSummary.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
+                  <MetricPills items={extractSummary} />
                 </div>
                 <div className="mt-4">
                   <TabStrip active={extractTab} onSelect={setExtractTab} tabs={extractTabs} />
@@ -991,14 +999,14 @@ export function PlaygroundShell({
               <div className="mt-6 grid gap-4 lg:grid-cols-2">
                 <FileSlot
                   title="Original version"
-                  helper="Use the baseline contract or manuscript version as the source for compare."
+                  helper="Use the earlier draft or load the compare sample as the baseline."
                   file={originalFile}
                   onChange={(file) => setOriginalFile(file)}
                   onClear={() => setOriginalFile(null)}
                 />
                 <FileSlot
                   title="Revised version"
-                  helper="Drop the revised DOCX to generate a redline and side-by-side HTML diff."
+                  helper="Add the newer draft to generate a redline and side-by-side HTML diff."
                   file={revisedFile}
                   onChange={(file) => setRevisedFile(file)}
                   onClear={() => setRevisedFile(null)}
@@ -1030,18 +1038,7 @@ export function PlaygroundShell({
                       Download the redline in DOCX form or move through the HTML diff and change list.
                     </p>
                   </div>
-                  {compareSummary.length ? (
-                    <div className="flex flex-wrap gap-2">
-                      {compareSummary.map((item) => (
-                        <span
-                          key={item}
-                          className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
+                  <MetricPills items={compareSummary} />
                 </div>
                 <div className="mt-4">
                   <TabStrip active={compareTab} onSelect={setCompareTab} tabs={compareTabs} />
@@ -1057,7 +1054,7 @@ export function PlaygroundShell({
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent)]">
               Quick start
             </p>
-            <ol className="mt-4 space-y-4 text-sm leading-7 text-[color:var(--ink-muted)]">
+            <ol className="mt-4 space-y-3 text-sm leading-7 text-[color:var(--ink-muted)]">
               <li>
                 <span className="font-semibold text-[color:var(--ink)]">Extract:</span> use one
                 file when you need HTML, Markdown, comments, content controls, or embedded assets.
@@ -1111,12 +1108,12 @@ export function PlaygroundShell({
 
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(160deg,rgba(22,74,104,0.92),rgba(9,34,52,0.96))] p-6 text-white shadow-[0_30px_80px_rgba(15,33,48,0.35)]">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65">
-              Why it is direct
+              Route note
             </p>
-            <h2 className="mt-3 text-3xl leading-tight">
+            <h2 className="mt-3 text-2xl leading-tight">
               {sidebarTitle}
             </h2>
-            <ul className="mt-4 space-y-3 text-sm leading-7 text-white/75">
+            <ul className="mt-4 space-y-2 text-sm leading-7 text-white/75">
               {sidebarItems.map((item) => (
                 <li key={item}>{item}</li>
               ))}
