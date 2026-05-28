@@ -92,6 +92,7 @@ cd apps/worker && python -m pytest
 cd apps/web && NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8010 pnpm start --hostname 127.0.0.1 --port 4311
 pnpm verify:lighthouse -- --url http://127.0.0.1:4311 --output docs/qc-artifacts/lighthouse/local.report.json
 pnpm verify:compare -- --base-url http://127.0.0.1:8010 --iterations 7 --target-size-bytes 1048576 --change-interval 400 --output docs/qc-artifacts/compare/local-benchmark.json
+python scripts/build_a1_word_report.py
 ```
 
 ## Qualification Tracking

@@ -54,12 +54,13 @@ Branch: `cursor/docx-redline-build`
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a1_contract_redline_matches_structural_baseline` verifies the shipped contract sample produces structural insertions, deletions, and the added confidentiality paragraph in the generated redline.
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a2_conversion_preserves_formatting` verifies the shipped generic sample preserves heading, bold, italic, list items, and image extraction across HTML and Markdown conversions.
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a3_comments_extract_correctly` verifies the shipped manuscript comments sample preserves author, reply, resolved state, quoted text, and Markdown export content.
+- `scripts/build_a1_word_report.py` now generates a Word-backed structural baseline report at `docs/baselines/contract-redline-a1.md` using local Microsoft Word automation.
 
 ## Remaining Section 23 Gaps
 
 - Hosted deployment evidence is not collected yet.
 - Docker `compose up --build` still needs a clean full-stack pass on a healthy Docker host after a Docker build transport EOF during worker-image build.
-- Acceptance fixture A1 still needs an explicit Word-output structural baseline artifact, not just the repo fixture assertions.
+- Acceptance fixture A1 now has a Word-output structural baseline artifact, but it still shows one remaining mismatch in how the inserted confidentiality sentence is attached relative to Word's output.
 - Worker image push evidence is not collected yet from a completed release workflow run.
 - Final PR and release qualification verdict are not ready yet.
 
@@ -67,6 +68,6 @@ Branch: `cursor/docx-redline-build`
 
 1. Re-run `docker compose up --build` on a healthy host or after the Docker transport issue clears, then verify `http://localhost:<port>` and `/health`.
 2. Capture hosted deployment evidence for the web app and worker API, including 200 responses and release artifact references.
-3. Add or attach the manual Word structural baseline artifact for A1 so the compare sample is anchored to a Word-generated expectation.
+3. Remove the last A1 mismatch shown in `docs/baselines/contract-redline-a1.md` so the compare output aligns structurally with Word's insertion grouping.
 4. Push or document the worker image publication step required by Section 23.15.
 5. Create the release PR once all Section 23 boxes are backed by evidence.

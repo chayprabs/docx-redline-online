@@ -1,0 +1,33 @@
+﻿{
+    "generated_at":  "2026-05-29T02:53:12.7387155+05:30",
+    "original":  "C:\\Users\\chait\\AppData\\Local\\Temp\\tmp5i5v5yi5\\contract-redline-original.docx",
+    "revised":  "C:\\Users\\chait\\AppData\\Local\\Temp\\tmp5i5v5yi5\\contract-redline-revised.docx",
+    "revision_count":  5,
+    "revisions":  [
+                      {
+                          "index":  1,
+                          "type":  2,
+                          "text":  "thirty"
+                      },
+                      {
+                          "index":  2,
+                          "type":  1,
+                          "text":  "fifteen"
+                      },
+                      {
+                          "index":  3,
+                          "type":  1,
+                          "text":  "ten business days of"
+                      },
+                      {
+                          "index":  4,
+                          "type":  2,
+                          "text":  "from either party"
+                      },
+                      {
+                          "index":  5,
+                          "type":  1,
+                          "text":  ". Confidentiality obligations survive termination"
+                      }
+                  ]
+}

@@ -2,6 +2,7 @@ import base64
 import copy
 import html
 import io
+import re
 import zipfile
 from dataclasses import dataclass
 from difflib import SequenceMatcher
@@ -41,7 +42,27 @@ def _paragraph_text(paragraph: etree._Element) -> str:
 def _tokenise(text: str) -> list[str]:
     if not text:
         return []
-    return text.split()
+    return re.findall(r"\w+|[^\w\s]", text)
+
+
+def _join_tokens(tokens: list[str]) -> str:
+    if not tokens:
+        return ""
+
+    pieces: list[str] = []
+    for token in tokens:
+        if not pieces:
+            pieces.append(token)
+            continue
+
+        if re.fullmatch(r"[^\w\s]", token):
+            pieces[-1] = f"{pieces[-1]}{token}"
+        elif re.fullmatch(r"[^\w\s]", pieces[-1][-1:]):
+            pieces.append(token)
+        else:
+            pieces.append(f" {token}")
+
+    return "".join(pieces)
 
 
 def _diff_text(before: str, after: str) -> list[tuple[str, str]]:
@@ -55,14 +76,14 @@ def _diff_text(before: str, after: str) -> list[tuple[str, str]]:
 
     for opcode, i1, i2, j1, j2 in matcher.get_opcodes():
         if opcode == "equal":
-            value = " ".join(before_tokens[i1:i2])
+            value = _join_tokens(before_tokens[i1:i2])
         elif opcode == "delete":
-            value = " ".join(before_tokens[i1:i2])
+            value = _join_tokens(before_tokens[i1:i2])
         elif opcode == "insert":
-            value = " ".join(after_tokens[j1:j2])
+            value = _join_tokens(after_tokens[j1:j2])
         else:
-            deleted = " ".join(before_tokens[i1:i2])
-            inserted = " ".join(after_tokens[j1:j2])
+            deleted = _join_tokens(before_tokens[i1:i2])
+            inserted = _join_tokens(after_tokens[j1:j2])
             if deleted:
                 ops.append(("delete", deleted))
             if inserted:
@@ -72,7 +93,36 @@ def _diff_text(before: str, after: str) -> list[tuple[str, str]]:
         if value:
             ops.append((opcode, value))
 
-    return ops
+    return _normalize_ops(ops)
+
+
+def _normalize_ops(ops: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    normalized: list[tuple[str, str]] = []
+    index = 0
+
+    while index < len(ops):
+        previous = normalized[-1] if normalized else None
+        current = ops[index]
+        following = ops[index + 1] if index + 1 < len(ops) else None
+
+        if (
+            previous is not None
+            and previous[0] == "delete"
+            and current == ("equal", ".")
+            and following is not None
+            and following[0] == "insert"
+        ):
+            insert_text = following[1]
+            if insert_text.endswith("."):
+                insert_text = insert_text[:-1]
+            normalized.append(("insert", f". {insert_text}".strip()))
+            index += 2
+            continue
+
+        normalized.append(current)
+        index += 1
+
+    return normalized
 
 
 def _replace_paragraph_content(paragraph: etree._Element, ops: list[tuple[str, str]]) -> None:
