@@ -58,6 +58,18 @@ def test_markdown_conversion_preserves_basic_formatting(tmp_path: Path) -> None:
     assert len(payload["images"]) == 1
 
 
+def test_sample_download_returns_docx_bytes() -> None:
+    client = TestClient(app)
+
+    response = client.get("/v1/samples/contract-redline?variant=original")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith(
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    assert response.content[:2] == b"PK"
+
+
 def test_html_conversion_can_normalize_lists(tmp_path: Path) -> None:
     docx_path = create_conversion_fixture(tmp_path / "fixture.docx")
     client = TestClient(app)

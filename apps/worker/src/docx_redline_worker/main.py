@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .routers.comments import router as comments_router
@@ -12,6 +13,14 @@ app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
     summary="Server-side DOCX processing worker for redline workflows.",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_allow_origins,
+    allow_origin_regex=settings.cors_allow_origin_regex,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 app.include_router(conversion_router)
 app.include_router(comments_router)

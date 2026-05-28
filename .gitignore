@@ -24,6 +24,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 *.egg-info/
+.*.log
 .DS_Store
 *.tsbuildinfo
 .env

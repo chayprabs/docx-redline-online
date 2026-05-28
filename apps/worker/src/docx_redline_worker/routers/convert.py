@@ -1,8 +1,9 @@
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Response, UploadFile
 
 from ..config import settings
 from ..schemas import HtmlConversionResponse, MarkdownConversionResponse, SampleCatalogResponse, SampleDocument
 from ..services.conversion import convert_docx_to_html, convert_docx_to_markdown
+from ..services.sample_documents import get_sample_bytes
 
 router = APIRouter(prefix="/v1", tags=["conversion"])
 
@@ -31,6 +32,20 @@ SAMPLES = [
 @router.get("/samples", response_model=SampleCatalogResponse)
 async def list_samples() -> SampleCatalogResponse:
     return SampleCatalogResponse(samples=SAMPLES)
+
+
+@router.get("/samples/{sample_id}")
+async def download_sample(sample_id: str, variant: str | None = None) -> Response:
+    try:
+        sample_bytes, filename = get_sample_bytes(sample_id, variant=variant)
+    except ValueError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+
+    return Response(
+        content=sample_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 async def _read_docx(file: UploadFile) -> bytes:
