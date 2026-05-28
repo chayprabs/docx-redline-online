@@ -6,6 +6,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from docx_redline_worker.main import app
+from docx_redline_worker.services.compare import compare_docx
+from docx_redline_worker.services.sample_documents import get_sample_bytes
 
 from .helpers import create_compare_fixtures
 
@@ -46,3 +48,13 @@ def test_compare_endpoint_returns_redline_and_side_by_side_html(tmp_path: Path) 
     assert "<w:ins" in document_xml
     assert "<w:del" in document_xml
     assert "Alpha" in document_xml
+
+
+def test_compare_normalizes_insert_boundary_for_inserted_followup_paragraph() -> None:
+    original_bytes, _ = get_sample_bytes("contract-redline", "original")
+    revised_bytes, _ = get_sample_bytes("contract-redline", "revised")
+
+    response = compare_docx(original_bytes, revised_bytes)
+    change_texts = [change.text for change in response.changes]
+
+    assert ". Confidentiality obligations survive termination" in change_texts

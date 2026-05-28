@@ -29,7 +29,7 @@ def test_acceptance_a1_contract_redline_matches_structural_baseline() -> None:
     assert "thirty" in texts
     assert "fifteen" in texts
     assert "ten business days of" in texts
-    assert "Confidentiality obligations survive termination." in texts
+    assert ". Confidentiality obligations survive termination" in texts
     assert "unchanged paragraphs omitted" in payload["html_diff"]
 
     redline_bytes = base64.b64decode(payload["redline_docx_base64"])

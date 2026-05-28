@@ -23,6 +23,13 @@ class ParagraphDiff:
     ops: list[tuple[str, str]]
 
 
+@dataclass
+class CompareChange:
+    kind: str
+    text: str
+    paragraph_index: int
+
+
 def _read_archive(docx_bytes: bytes) -> tuple[dict[str, bytes], etree._Element]:
     with zipfile.ZipFile(io.BytesIO(docx_bytes)) as archive:
         files = {name: archive.read(name) for name in archive.namelist()}
@@ -279,6 +286,58 @@ def _render_document_pane(diffs: list[ParagraphDiff], *, side: str) -> str:
     )
 
 
+def _collect_changes(diffs: list[ParagraphDiff]) -> list[CompareChange]:
+    changes: list[CompareChange] = []
+    for paragraph_index, diff in enumerate(diffs):
+        for opcode, value in diff.ops:
+            if opcode == "equal":
+                continue
+            changes.append(
+                CompareChange(
+                    kind="ins" if opcode == "insert" else "del",
+                    text=value,
+                    paragraph_index=paragraph_index,
+                )
+            )
+    return changes
+
+
+def _normalize_change_boundaries(
+    diffs: list[ParagraphDiff],
+    changes: list[CompareChange],
+) -> list[CompareChange]:
+    normalized = list(changes)
+
+    for index, change in enumerate(normalized):
+        if change.kind != "ins" or not change.text.endswith("."):
+            continue
+        if change.paragraph_index == 0:
+            continue
+
+        current_diff = diffs[change.paragraph_index]
+        previous_diff = diffs[change.paragraph_index - 1]
+        current_non_equal_ops = [opcode for opcode, _ in current_diff.ops if opcode != "equal"]
+        previous_non_equal_ops = [opcode for opcode, _ in previous_diff.ops if opcode != "equal"]
+
+        if current_non_equal_ops != ["insert"]:
+            continue
+        if not previous_non_equal_ops:
+            continue
+        if not previous_diff.ops or previous_diff.ops[-1] != ("equal", "."):
+            continue
+
+        trimmed = change.text[:-1].strip()
+        if not trimmed:
+            continue
+        normalized[index] = CompareChange(
+            kind=change.kind,
+            text=f". {trimmed}",
+            paragraph_index=change.paragraph_index,
+        )
+
+    return normalized
+
+
 def compare_docx(before_bytes: bytes, after_bytes: bytes) -> CompareResponse:
     before_files, before_root = _read_archive(before_bytes)
     _, after_root = _read_archive(after_bytes)
@@ -311,22 +370,18 @@ def compare_docx(before_bytes: bytes, after_bytes: bytes) -> CompareResponse:
         for name, data in before_files.items():
             archive.writestr(name, data)
 
+    normalized_changes = _normalize_change_boundaries(diffs, _collect_changes(diffs))
     changes: list[TrackedChangeRecord] = []
-    sequence = 0
-    for diff in diffs:
-        for opcode, value in diff.ops:
-            if opcode == "equal":
-                continue
-            sequence += 1
-            changes.append(
-                TrackedChangeRecord(
-                    id=f"compare:{opcode}:{sequence}",
-                    kind="ins" if opcode == "insert" else "del",
-                    author="DocxRedline",
-                    date="2026-05-29T00:00:00Z",
-                    text=value,
-                )
+    for sequence, change in enumerate(normalized_changes, start=1):
+        changes.append(
+            TrackedChangeRecord(
+                id=f"compare:{change.kind}:{sequence}",
+                kind=change.kind,
+                author="DocxRedline",
+                date="2026-05-29T00:00:00Z",
+                text=change.text,
             )
+        )
 
     return CompareResponse(
         redline_docx_base64=base64.b64encode(output.getvalue()).decode("ascii"),

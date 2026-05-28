@@ -2,7 +2,7 @@
 
 Sample: `contract-redline`
 
-Status: **REVIEW**
+Status: **PASS**
 
 ## Word revisions
 
@@ -18,12 +18,12 @@ Status: **REVIEW**
 - `ins` `fifteen`
 - `ins` `ten business days of`
 - `del` `from either party`
-- `ins` `Confidentiality obligations survive termination.`
+- `ins` `. Confidentiality obligations survive termination`
 
 ## Missing from DocxRedline
 
-- `ins` `. Confidentiality obligations survive termination` x1
+- None
 
 ## Additional in DocxRedline
 
-- `ins` `Confidentiality obligations survive termination.` x1
+- None
