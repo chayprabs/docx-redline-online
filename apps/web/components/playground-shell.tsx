@@ -595,6 +595,9 @@ export function PlaygroundShell({
     }
     return 0;
   });
+  const preferredSample = preferredSampleId
+    ? orderedSamples.find((sample) => sample.id === preferredSampleId) ?? null
+    : null;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -1316,6 +1319,40 @@ export function PlaygroundShell({
           {errorMessage ? (
             <div className="mt-6 rounded-2xl border border-[#d68c76] bg-[#fff0eb] px-4 py-3 text-sm text-[#8a3325]">
               {errorMessage}
+            </div>
+          ) : null}
+
+          {preferredSample ? (
+            <div className="mt-6 rounded-[28px] border border-[color:var(--line)] bg-white/75 p-5">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-[color:var(--accent-2)]">
+                    Suggested sample
+                  </p>
+                  <h3 className="mt-2 text-xl leading-tight text-[color:var(--ink)]">
+                    {preferredSample.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[color:var(--ink-muted)]">
+                    {preferredSample.description}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] text-[color:var(--ink-muted)]">
+                    <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1">
+                      {preferredSample.recommended_mode === "compare" ? "Loads two DOCX files" : "Loads one DOCX file"}
+                    </span>
+                    <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1">
+                      Route-matched fixture
+                    </span>
+                  </div>
+                </div>
+                <button
+                  className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
+                  disabled={sampleLoadingId === preferredSample.id}
+                  onClick={() => void handleSampleLoad(preferredSample)}
+                  type="button"
+                >
+                  {sampleLoadingId === preferredSample.id ? "Loading sample..." : "Load suggested sample"}
+                </button>
+              </div>
             </div>
           ) : null}
 
