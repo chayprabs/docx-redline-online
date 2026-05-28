@@ -1,26 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SampleCard } from "@docx-redline/shared-ui";
+import type { SampleDocument } from "@docx-redline/shared-types";
 
-const samples = [
+const fallbackSamples: SampleDocument[] = [
   {
+    id: "contract-redline",
     title: "Contract Draft",
     description:
       "Two legal drafts with insertions, deletions, and formatting changes for redline compare.",
-    accent: "linear-gradient(90deg, #9f2a1d, #cf6a43)",
+    recommended_mode: "compare",
   },
   {
+    id: "manuscript-comments",
     title: "Manuscript Review",
     description:
       "A manuscript fixture with threaded comments, reply chains, and resolved discussions.",
-    accent: "linear-gradient(90deg, #164a68, #5d7f8a)",
+    recommended_mode: "extract",
   },
   {
+    id: "generic-images",
     title: "Illustrated Brief",
     description:
       "A generic DOCX with images and content controls to validate HTML and Markdown exports.",
-    accent: "linear-gradient(90deg, #8b6b2a, #d1a659)",
+    recommended_mode: "extract",
   },
 ];
 
@@ -88,6 +92,32 @@ function TabStrip({ tabs }: { tabs: string[] }) {
 
 export function PlaygroundShell() {
   const [mode, setMode] = useState<"extract" | "compare">("extract");
+  const [samples, setSamples] = useState<SampleDocument[]>(fallbackSamples);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "");
+    if (!apiBase) {
+      return () => controller.abort();
+    }
+
+    fetch(`${apiBase}/v1/samples`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = (await response.json()) as { samples?: SampleDocument[] };
+        if (payload.samples?.length) {
+          setSamples(payload.samples);
+        }
+      })
+      .catch(() => {
+        // Fallback fixtures stay in place when the worker is offline.
+      });
+
+    return () => controller.abort();
+  }, []);
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 pb-16 pt-6 sm:px-8 lg:px-10">
@@ -225,7 +255,21 @@ export function PlaygroundShell() {
             </p>
             <div className="mt-5 space-y-4">
               {samples.map((sample) => (
-                <SampleCard key={sample.title} {...sample} />
+                <SampleCard
+                  key={sample.id}
+                  title={sample.title}
+                  description={sample.description}
+                  accent={
+                    sample.recommended_mode === "compare"
+                      ? "linear-gradient(90deg, #9f2a1d, #cf6a43)"
+                      : "linear-gradient(90deg, #164a68, #5d7f8a)"
+                  }
+                  footer={
+                    <span className="font-mono text-xs uppercase tracking-[0.22em] text-[color:var(--ink-muted)]">
+                      {sample.recommended_mode}
+                    </span>
+                  }
+                />
               ))}
             </div>
           </section>

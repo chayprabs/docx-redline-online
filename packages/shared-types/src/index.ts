@@ -26,3 +26,10 @@ export interface WorkerMeta {
   artifactTtlSeconds: number;
   maxUploadMb: number;
 }
+
+export interface SampleDocument {
+  id: string;
+  title: string;
+  description: string;
+  recommended_mode: "extract" | "compare";
+}
