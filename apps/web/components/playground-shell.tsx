@@ -439,6 +439,8 @@ export function PlaygroundShell({
   const [mutationLoading, setMutationLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const pathname = usePathname();
+  const extractReady = Boolean(extractFile);
+  const compareReady = Boolean(originalFile && revisedFile);
 
   const extractSummary = extractState.html
     ? [
@@ -1020,12 +1022,17 @@ export function PlaygroundShell({
                   </label>
                   <button
                     className="mt-5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
-                    disabled={extractLoading}
+                    disabled={extractLoading || !extractReady}
                     onClick={() => void handleExtractRun()}
                     type="button"
                   >
                     {extractLoading ? "Running extract..." : "Run extract"}
                   </button>
+                  <p className="mt-3 text-sm text-[color:var(--ink-muted)]">
+                    {extractReady
+                      ? "Ready to run on the selected DOCX."
+                      : "Choose one DOCX or load a sample to enable extract."}
+                  </p>
                 </Surface>
               </div>
 
@@ -1070,15 +1077,16 @@ export function PlaygroundShell({
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <button
                   className="rounded-full bg-[color:var(--accent-2)] px-4 py-2 text-sm text-white disabled:opacity-50"
-                  disabled={compareLoading}
+                  disabled={compareLoading || !compareReady}
                   onClick={() => void handleCompareRun()}
                   type="button"
                 >
                   {compareLoading ? "Comparing..." : "Run compare"}
                 </button>
                 <span className="text-sm text-[color:var(--ink-muted)]">
-                  Compare generates the redline DOCX, a side-by-side HTML diff, and a per-change
-                  action list.
+                  {compareReady
+                    ? "Compare generates the redline DOCX, a side-by-side HTML diff, and a per-change action list."
+                    : "Choose both the original and revised DOCX files to enable compare."}
                 </span>
               </div>
 
