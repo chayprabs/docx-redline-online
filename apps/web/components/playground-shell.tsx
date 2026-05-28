@@ -15,6 +15,7 @@ import type {
   SampleDocument,
   TrackedChange,
   TrackedChangesResult,
+  WorkerMeta,
 } from "@docx-redline/shared-types";
 
 const apiBase =
@@ -167,6 +168,15 @@ function formatBytes(size: number) {
 
 function formatCount(count: number, singular: string, plural = `${singular}s`) {
   return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function formatDuration(seconds: number) {
+  if (seconds < 60) {
+    return `${seconds}s`;
+  }
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+  return remainder ? `${minutes}m ${remainder}s` : `${minutes}m`;
 }
 
 function downloadBlob(blob: Blob, fileName: string) {
@@ -428,6 +438,7 @@ export function PlaygroundShell({
   const [extractTab, setExtractTab] = useState<ExtractTab>(initialExtractTab);
   const [compareTab, setCompareTab] = useState<CompareTab>(initialCompareTab);
   const [samples, setSamples] = useState<SampleDocument[]>(fallbackSamples);
+  const [workerMeta, setWorkerMeta] = useState<WorkerMeta | null>(null);
   const [extractFile, setExtractFile] = useState<File | null>(null);
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [revisedFile, setRevisedFile] = useState<File | null>(null);
@@ -485,6 +496,16 @@ export function PlaygroundShell({
       })
       .catch(() => {
         // Fallback samples remain available offline.
+      });
+
+    readJson<WorkerMeta>("/v1/meta", {
+      signal: controller.signal,
+    })
+      .then((payload) => {
+        setWorkerMeta(payload);
+      })
+      .catch(() => {
+        // Meta stays optional in the UI.
       });
 
     return () => controller.abort();
@@ -1169,6 +1190,32 @@ export function PlaygroundShell({
         </div>
 
         <aside className="space-y-5">
+          {workerMeta ? (
+            <section className="rounded-[32px] border border-[color:var(--line)] bg-[color:var(--surface-elevated)] p-6 shadow-[0_24px_70px_rgba(71,48,29,0.08)]">
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent-2)]">
+                Privacy and limits
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-3xl border border-[color:var(--line)] bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-[color:var(--ink)]">
+                    Upload size
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-[color:var(--ink-muted)]">
+                    Up to {workerMeta.maxUploadMb} MB per file.
+                  </p>
+                </div>
+                <div className="rounded-3xl border border-[color:var(--line)] bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-[color:var(--ink)]">
+                    Artifact retention
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-[color:var(--ink-muted)]">
+                    Generated artifacts expire after {formatDuration(workerMeta.artifactTtlSeconds)}.
+                  </p>
+                </div>
+              </div>
+            </section>
+          ) : null}
+
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(145deg,rgba(255,251,245,0.9),rgba(247,239,229,0.95))] p-6 shadow-[0_20px_60px_rgba(71,48,29,0.08)]">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent)]">
               Quick start
