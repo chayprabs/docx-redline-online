@@ -40,6 +40,37 @@ jobs:
 
   compose:
     runs-on: ubuntu-latest
+    env:
+      DOCX_REDLINE_WEB_PORT: 3300
+      DOCX_REDLINE_WORKER_PORT: 8100
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config
+      - run: docker compose up -d --build
+      - name: Wait for worker health
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WORKER_PORT}/health >/tmp/worker-health.json; then
+              cat /tmp/worker-health.json
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "worker health check did not pass in time" >&2
+          exit 1
+      - name: Smoke test web and API routes
+        run: |
+          curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WEB_PORT}/ >/tmp/web-root.html
+          curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WEB_PORT}/docx-compare >/tmp/web-compare.html
+          curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WORKER_PORT}/v1/meta >/tmp/worker-meta.json
+          curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WORKER_PORT}/v1/samples >/tmp/worker-samples.json
+          grep -q "DocxRedline" /tmp/web-root.html
+          grep -q "Compare" /tmp/web-compare.html
+          grep -q "\"artifactTtlSeconds\"" /tmp/worker-meta.json
+          grep -q "\"contract-redline\"" /tmp/worker-samples.json
+      - name: Show compose logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+      - name: Tear down compose stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans
