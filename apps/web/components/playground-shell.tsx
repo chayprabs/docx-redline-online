@@ -474,6 +474,29 @@ export function PlaygroundShell({
     return () => controller.abort();
   }, []);
 
+  function handleModeChange(nextMode: "extract" | "compare") {
+    setErrorMessage(null);
+    setMode(nextMode);
+  }
+
+  function handleExtractFileChange(file: File | null) {
+    setErrorMessage(null);
+    setExtractFile(file);
+    setExtractState(createInitialExtractState());
+  }
+
+  function handleOriginalFileChange(file: File | null) {
+    setErrorMessage(null);
+    setOriginalFile(file);
+    setCompareState(createInitialCompareState());
+  }
+
+  function handleRevisedFileChange(file: File | null) {
+    setErrorMessage(null);
+    setRevisedFile(file);
+    setCompareState(createInitialCompareState());
+  }
+
   async function handleSampleLoad(sample: SampleDocument) {
     setErrorMessage(null);
     setSampleLoadingId(sample.id);
@@ -936,7 +959,7 @@ export function PlaygroundShell({
                     ? "bg-[color:var(--accent)] text-white shadow-[0_14px_30px_rgba(159,42,29,0.22)]"
                     : "text-[color:var(--ink-muted)]"
                 }`}
-                onClick={() => setMode("extract")}
+                onClick={() => handleModeChange("extract")}
                 type="button"
               >
                 Extract
@@ -947,7 +970,7 @@ export function PlaygroundShell({
                     ? "bg-[color:var(--accent-2)] text-white shadow-[0_14px_30px_rgba(22,74,104,0.18)]"
                     : "text-[color:var(--ink-muted)]"
                 }`}
-                onClick={() => setMode("compare")}
+                onClick={() => handleModeChange("compare")}
                 type="button"
               >
                 Compare
@@ -968,8 +991,8 @@ export function PlaygroundShell({
                   title="Primary file"
                   helper="One file unlocks conversions, comments, tracked changes, controls, assets, and document parts."
                   file={extractFile}
-                  onChange={(file) => setExtractFile(file)}
-                  onClear={() => setExtractFile(null)}
+                  onChange={handleExtractFileChange}
+                  onClear={() => handleExtractFileChange(null)}
                 />
                 <Surface eyebrow="Options" title="Conversion controls">
                   <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
@@ -1032,15 +1055,15 @@ export function PlaygroundShell({
                   title="Original version"
                   helper="Use the earlier draft or load the compare sample as the baseline."
                   file={originalFile}
-                  onChange={(file) => setOriginalFile(file)}
-                  onClear={() => setOriginalFile(null)}
+                  onChange={handleOriginalFileChange}
+                  onClear={() => handleOriginalFileChange(null)}
                 />
                 <FileSlot
                   title="Revised version"
                   helper="Add the newer draft to generate a redline and side-by-side HTML diff."
                   file={revisedFile}
-                  onChange={(file) => setRevisedFile(file)}
-                  onClear={() => setRevisedFile(null)}
+                  onChange={handleRevisedFileChange}
+                  onClear={() => handleRevisedFileChange(null)}
                 />
               </div>
 
