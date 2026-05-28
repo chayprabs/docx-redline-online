@@ -13,6 +13,7 @@ export default function DocxRedlinePage() {
     <PlaygroundShell
       initialMode="compare"
       initialCompareTab="Changes"
+      visibleCompareTabs={["Changes", "Redline"]}
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."

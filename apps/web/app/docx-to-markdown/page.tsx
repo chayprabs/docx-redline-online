@@ -13,6 +13,7 @@ export default function DocxToMarkdownPage() {
     <PlaygroundShell
       initialMode="extract"
       initialExtractTab="Markdown"
+      visibleExtractTabs={["Markdown", "HTML", "Assets"]}
       preferredSampleId="generic-images"
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."

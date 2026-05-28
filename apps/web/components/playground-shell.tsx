@@ -422,6 +422,8 @@ export function PlaygroundShell({
   initialMode = "extract",
   initialExtractTab = "HTML",
   initialCompareTab = "Redline",
+  visibleExtractTabs = extractTabs,
+  visibleCompareTabs = compareTabs,
   preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
@@ -436,6 +438,8 @@ export function PlaygroundShell({
   initialMode?: "extract" | "compare";
   initialExtractTab?: ExtractTab;
   initialCompareTab?: CompareTab;
+  visibleExtractTabs?: readonly ExtractTab[];
+  visibleCompareTabs?: readonly CompareTab[];
   preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
@@ -1316,7 +1320,7 @@ export function PlaygroundShell({
                   <MetricPills items={extractSummary} />
                 </div>
                 <div className="mt-4">
-                  <TabStrip active={extractTab} onSelect={setExtractTab} tabs={extractTabs} />
+                  <TabStrip active={extractTab} onSelect={setExtractTab} tabs={visibleExtractTabs} />
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">{renderExtractActions()}</div>
                 <div className="mt-5">{renderExtractContent()}</div>
@@ -1379,7 +1383,7 @@ export function PlaygroundShell({
                   <MetricPills items={compareSummary} />
                 </div>
                 <div className="mt-4">
-                  <TabStrip active={compareTab} onSelect={setCompareTab} tabs={compareTabs} />
+                  <TabStrip active={compareTab} onSelect={setCompareTab} tabs={visibleCompareTabs} />
                 </div>
                 <div className="mt-5">{renderCompareContent()}</div>
               </div>
