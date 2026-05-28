@@ -1,0 +1,37 @@
+name: Verify Hosted
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_url:
+        description: Public web base URL to verify
+        required: true
+        type: string
+      api_url:
+        description: Public API base URL to verify
+        required: true
+        type: string
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  verify-hosted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify hosted web and API routes
+        run: |
+          python scripts/verify_hosted.py \
+            --web-url "${{ inputs.web_url }}" \
+            --api-url "${{ inputs.api_url }}" \
+            --output docs/qc-artifacts/hosted/github-actions.json
+      - name: Upload hosted verification artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hosted-verification
+          path: docs/qc-artifacts/hosted/github-actions.json
