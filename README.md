@@ -70,6 +70,13 @@ If those host ports are busy, override them without editing the compose file:
 DOCX_REDLINE_WEB_PORT=3005 DOCX_REDLINE_WORKER_PORT=8011 docker compose up --build
 ```
 
+## Container Publishing
+
+Tagged releases and manual release workflow runs publish these images to GHCR:
+
+- `ghcr.io/chayprabs/docx-redline-online-worker`
+- `ghcr.io/chayprabs/docx-redline-online-web`
+
 ## Verification Commands
 
 ```bash

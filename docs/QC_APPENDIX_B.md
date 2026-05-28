@@ -13,6 +13,12 @@ Branch: `cursor/docx-redline-build`
 - `pnpm build` passes.
 - `apps/worker`: `PYTHONPATH=src pytest` passes.
 - `docker compose config` passes for both compose files after adding overridable host ports and worker health checks.
+- CI now builds the web image, worker image, and validates `docker compose config` on GitHub Actions.
+
+### Release plumbing
+
+- `.github/workflows/release.yml` now publishes tagged or manually triggered web and worker images to GHCR.
+- README documents the expected GHCR image names for release verification.
 
 ### Qualification tooling now in repo
 
@@ -54,7 +60,7 @@ Branch: `cursor/docx-redline-build`
 - Hosted deployment evidence is not collected yet.
 - Docker `compose up --build` still needs a clean full-stack pass on a healthy Docker host after a Docker build transport EOF during worker-image build.
 - Acceptance fixture A1 still needs an explicit Word-output structural baseline artifact, not just the repo fixture assertions.
-- Worker image push evidence is not collected yet.
+- Worker image push evidence is not collected yet from a completed release workflow run.
 - Final PR and release qualification verdict are not ready yet.
 
 ## Next Evidence To Collect
