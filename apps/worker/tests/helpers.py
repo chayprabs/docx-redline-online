@@ -147,3 +147,90 @@ def create_comments_fixture(target: Path) -> Path:
 
     target.write_bytes(output.getvalue())
     return target
+
+
+def create_tracked_changes_fixture(target: Path) -> Path:
+    document = Document()
+    document.add_paragraph("Tracked changes fixture")
+    document.add_paragraph("Formatted paragraph")
+    document.save(target)
+
+    with zipfile.ZipFile(target, "r") as archive:
+        files = {name: archive.read(name) for name in archive.namelist()}
+
+    root = etree.fromstring(files["word/document.xml"])
+    paragraphs = root.xpath("//w:body/w:p", namespaces={
+        "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    })
+
+    first_paragraph = paragraphs[0]
+    for child in list(first_paragraph):
+        first_paragraph.remove(child)
+
+    run_start = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    text_start = etree.SubElement(run_start, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    text_start.text = "Keep "
+
+    deletion = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}del")
+    deletion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id", "1")
+    deletion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}author", "Ada")
+    deletion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}date", "2026-05-29T00:20:00Z")
+    deletion_run = etree.SubElement(deletion, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    deletion_text = etree.SubElement(deletion_run, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}delText")
+    deletion_text.text = "old"
+
+    insertion = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ins")
+    insertion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id", "2")
+    insertion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}author", "Ben")
+    insertion.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}date", "2026-05-29T00:21:00Z")
+    insertion_run = etree.SubElement(insertion, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    insertion_text = etree.SubElement(insertion_run, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    insertion_text.text = "new"
+
+    move_from = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}moveFrom")
+    move_from.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id", "3")
+    move_from.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}author", "Cara")
+    move_from.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}date", "2026-05-29T00:22:00Z")
+    move_from_run = etree.SubElement(move_from, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    move_from_text = etree.SubElement(move_from_run, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    move_from_text.text = "away"
+
+    move_to = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}moveTo")
+    move_to.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id", "4")
+    move_to.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}author", "Cara")
+    move_to.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}date", "2026-05-29T00:22:00Z")
+    move_to_run = etree.SubElement(move_to, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    move_to_text = etree.SubElement(move_to_run, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    move_to_text.text = "here"
+
+    run_end = etree.SubElement(first_paragraph, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}r")
+    text_end = etree.SubElement(run_end, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t")
+    text_end.text = " tail"
+
+    second_paragraph = paragraphs[1]
+    ppr = etree.Element("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr")
+    justification = etree.SubElement(ppr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}jc")
+    justification.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val", "center")
+    ppr_change = etree.SubElement(ppr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPrChange")
+    ppr_change.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id", "5")
+    ppr_change.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}author", "Dana")
+    ppr_change.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}date", "2026-05-29T00:23:00Z")
+    old_ppr = etree.SubElement(ppr_change, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr")
+    old_justification = etree.SubElement(old_ppr, "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}jc")
+    old_justification.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val", "left")
+    second_paragraph.insert(0, ppr)
+
+    files["word/document.xml"] = etree.tostring(
+        root,
+        xml_declaration=True,
+        encoding="UTF-8",
+        standalone="yes",
+    )
+
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        for name, data in files.items():
+            archive.writestr(name, data)
+
+    target.write_bytes(output.getvalue())
+    return target

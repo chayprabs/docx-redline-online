@@ -51,4 +51,21 @@ class CommentsResponse(BaseModel):
     markdown: str
 
 
+class TrackedChangeRecord(BaseModel):
+    id: str
+    kind: str
+    author: str
+    date: str
+    text: str
+
+
+class TrackedChangesResponse(BaseModel):
+    changes: list[TrackedChangeRecord]
+
+
+class RedlineMutationResponse(BaseModel):
+    changes: list[TrackedChangeRecord]
+    docx_base64: str
+
+
 DocxCommentRecord.model_rebuild()
