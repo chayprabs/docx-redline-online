@@ -77,6 +77,32 @@ Tagged releases and manual release workflow runs publish these images to GHCR:
 - `ghcr.io/chayprabs/docx-redline-online-worker`
 - `ghcr.io/chayprabs/docx-redline-online-web`
 
+## Deploy On Render
+
+The repo now includes a root `render.yaml` Blueprint for a two-service Render deployment:
+
+- `docx-redline` serves the Next.js app
+- `docx-redline-api` serves the FastAPI worker
+
+The web app can now proxy worker requests through `/api/worker`, so the browser no longer needs to call the worker origin directly. On Render, the Blueprint wires `DOCX_REDLINE_WORKER_BASE_URL` from the worker service host and sets `NEXT_PUBLIC_API_BASE_URL=/api/worker`.
+
+To deploy from this branch:
+
+```bash
+git push origin cursor/docx-redline-build
+```
+
+Then open:
+
+```text
+https://dashboard.render.com/blueprint/new?repo=https://github.com/chayprabs/docx-redline-online
+```
+
+If Render prompts for values, keep the default service names from `render.yaml` so the documented public URLs stay consistent:
+
+- Web: `https://docx-redline.onrender.com`
+- Worker API: `https://docx-redline-api.onrender.com`
+
 ## Verification Commands
 
 ```bash

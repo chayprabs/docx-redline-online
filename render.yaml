@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: docx-redline
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    branch: cursor/docx-redline-build
+    autoDeploy: true
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: /api/worker
+      - key: DOCX_REDLINE_WORKER_BASE_URL
+        fromService:
+          name: docx-redline-api
+          type: web
+          property: host
+
+  - type: web
+    name: docx-redline-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./apps/worker/Dockerfile
+    dockerContext: .
+    branch: cursor/docx-redline-build
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: DOCX_REDLINE_ARTIFACT_TTL_SECONDS
+        value: "900"
+      - key: DOCX_REDLINE_MAX_UPLOAD_MB
+        value: "25"
