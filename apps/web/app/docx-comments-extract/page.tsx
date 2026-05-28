@@ -9,5 +9,19 @@ export const metadata: Metadata = {
 };
 
 export default function DocxCommentsExtractPage() {
-  return <PlaygroundShell initialMode="extract" initialExtractTab="Comments" />;
+  return (
+    <PlaygroundShell
+      initialMode="extract"
+      initialExtractTab="Comments"
+      heroEyebrow="DOCX Comments Extract"
+      heroTitle="Extract comment threads, replies, and resolved state from a DOCX."
+      heroDescription="Use one file, run extract once, and land directly in the comments view with quoted text, authors, timestamps, and replies ready to inspect."
+      sidebarTitle="This route is built for comment review and export."
+      sidebarItems={[
+        "The comments tab opens first so threaded review content is the first thing you see.",
+        "Markdown export and JSON details remain part of the same worker pass.",
+        "Use the manuscript sample to check replies and resolved state without uploading your own file first.",
+      ]}
+    />
+  );
 }

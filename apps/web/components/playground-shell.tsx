@@ -374,10 +374,24 @@ export function PlaygroundShell({
   initialMode = "extract",
   initialExtractTab = "HTML",
   initialCompareTab = "Redline",
+  heroEyebrow = "DocxRedline",
+  heroTitle = "Word-style redlines without opening Word.",
+  heroDescription = "Upload one DOCX to extract content, or upload two DOCX files to generate a redline, inspect tracked changes, and export the result straight away.",
+  sidebarTitle = "The interface stays focused on the file, the worker run, and the output.",
+  sidebarItems = [
+    "Extract mode exposes conversions, comments, controls, assets, and document parts in one pass.",
+    "Compare mode keeps the redline, diff, and change decisions in one place.",
+    "Each sample card loads a real DOCX fixture from the worker so the path is testable end to end.",
+  ],
 }: {
   initialMode?: "extract" | "compare";
   initialExtractTab?: ExtractTab;
   initialCompareTab?: CompareTab;
+  heroEyebrow?: string;
+  heroTitle?: string;
+  heroDescription?: string;
+  sidebarTitle?: string;
+  sidebarItems?: string[];
 }) {
   const [mode, setMode] = useState<"extract" | "compare">(initialMode);
   const [extractTab, setExtractTab] = useState<ExtractTab>(initialExtractTab);
@@ -811,14 +825,13 @@ export function PlaygroundShell({
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.32em] text-[color:var(--accent-2)]">
-              DocxRedline
+              {heroEyebrow}
             </p>
             <h1 className="mt-2 text-4xl leading-tight text-[color:var(--ink)] md:text-5xl">
-              Word-style redlines without opening Word.
+              {heroTitle}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[color:var(--ink-muted)]">
-              Upload one DOCX to extract content, or upload two DOCX files to generate a redline,
-              inspect tracked changes, and export the result straight away.
+              {heroDescription}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -1101,12 +1114,12 @@ export function PlaygroundShell({
               Why it is direct
             </p>
             <h2 className="mt-3 text-3xl leading-tight">
-              The interface stays focused on the file, the worker run, and the output.
+              {sidebarTitle}
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-white/75">
-              <li>Extract mode exposes conversions, comments, controls, assets, and document parts in one pass.</li>
-              <li>Compare mode keeps the redline, diff, and change decisions in one place.</li>
-              <li>Each sample card loads a real DOCX fixture from the worker so the path is testable end to end.</li>
+              {sidebarItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </section>
         </aside>
