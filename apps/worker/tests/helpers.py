@@ -285,3 +285,18 @@ def create_content_controls_fixture(target: Path) -> Path:
 
     target.write_bytes(output.getvalue())
     return target
+
+
+def create_compare_fixtures(original_target: Path, revised_target: Path) -> tuple[Path, Path]:
+    original = Document()
+    original.add_paragraph("Alpha beta gamma")
+    original.add_paragraph("Shared paragraph")
+    original.save(original_target)
+
+    revised = Document()
+    revised.add_paragraph("Alpha delta gamma")
+    revised.add_paragraph("Shared paragraph")
+    revised.add_paragraph("New closing paragraph")
+    revised.save(revised_target)
+
+    return original_target, revised_target

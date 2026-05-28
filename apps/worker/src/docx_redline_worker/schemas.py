@@ -85,4 +85,16 @@ class ReplaceResponse(BaseModel):
     docx_base64: str
 
 
+class HtmlDiffPane(BaseModel):
+    title: str
+    html: str
+
+
+class CompareResponse(BaseModel):
+    redline_docx_base64: str
+    html_diff: str
+    panes: list[HtmlDiffPane]
+    changes: list[TrackedChangeRecord]
+
+
 DocxCommentRecord.model_rebuild()
