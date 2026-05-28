@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { PlaygroundLauncher } from "../components/playground-launcher";
 
 export default function Home() {
@@ -34,18 +32,12 @@ export default function Home() {
             </div>
           </div>
           <div className="grid gap-3 text-sm md:min-w-72">
-            <Link
+            <a
               className="rounded-full bg-[color:var(--accent)] px-5 py-3 text-center text-white shadow-[0_14px_30px_rgba(159,42,29,0.2)]"
-              href="/docx-redline"
+              href="#workflow-routes"
             >
-              Open redline workflow
-            </Link>
-            <Link
-              className="rounded-full border border-[color:var(--line)] bg-white/70 px-5 py-3 text-center text-[color:var(--ink-muted)] hover:border-[color:var(--accent-soft)] hover:text-[color:var(--ink)]"
-              href="/docx-comments-extract"
-            >
-              Open extract workflow
-            </Link>
+              Jump to workflow routes
+            </a>
             <a
               className="rounded-full border border-[color:var(--line)] px-5 py-3 text-center text-[color:var(--ink-muted)] hover:border-[color:var(--accent-soft)] hover:text-[color:var(--ink)]"
               href="https://github.com/chayprabs/docx-redline-online"
@@ -94,7 +86,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="pt-8">
+      <section className="pt-8" id="workflow-routes">
         <PlaygroundLauncher />
       </section>
     </main>
