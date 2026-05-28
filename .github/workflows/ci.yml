@@ -58,9 +58,18 @@ jobs:
           done
           echo "worker health check did not pass in time" >&2
           exit 1
+      - name: Wait for web root
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WEB_PORT}/ >/tmp/web-root.html; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "web root did not pass in time" >&2
+          exit 1
       - name: Smoke test web and API routes
         run: |
-          curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WEB_PORT}/ >/tmp/web-root.html
           curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WEB_PORT}/docx-compare >/tmp/web-compare.html
           curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WORKER_PORT}/v1/meta >/tmp/worker-meta.json
           curl --fail --silent http://127.0.0.1:${DOCX_REDLINE_WORKER_PORT}/v1/samples >/tmp/worker-samples.json
