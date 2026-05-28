@@ -366,10 +366,18 @@ function ChangeList({
   );
 }
 
-export function PlaygroundShell() {
-  const [mode, setMode] = useState<"extract" | "compare">("extract");
-  const [extractTab, setExtractTab] = useState<ExtractTab>("HTML");
-  const [compareTab, setCompareTab] = useState<CompareTab>("Redline");
+export function PlaygroundShell({
+  initialMode = "extract",
+  initialExtractTab = "HTML",
+  initialCompareTab = "Redline",
+}: {
+  initialMode?: "extract" | "compare";
+  initialExtractTab?: ExtractTab;
+  initialCompareTab?: CompareTab;
+}) {
+  const [mode, setMode] = useState<"extract" | "compare">(initialMode);
+  const [extractTab, setExtractTab] = useState<ExtractTab>(initialExtractTab);
+  const [compareTab, setCompareTab] = useState<CompareTab>(initialCompareTab);
   const [samples, setSamples] = useState<SampleDocument[]>(fallbackSamples);
   const [extractFile, setExtractFile] = useState<File | null>(null);
   const [originalFile, setOriginalFile] = useState<File | null>(null);
