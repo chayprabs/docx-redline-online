@@ -64,6 +64,12 @@ That brings up:
 - Web on `http://localhost:3000`
 - Worker on `http://localhost:8000`
 
+If those host ports are busy, override them without editing the compose file:
+
+```bash
+DOCX_REDLINE_WEB_PORT=3005 DOCX_REDLINE_WORKER_PORT=8011 docker compose up --build
+```
+
 ## Verification Commands
 
 ```bash

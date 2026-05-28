@@ -12,6 +12,7 @@ Branch: `cursor/docx-redline-build`
 - `pnpm typecheck` passes.
 - `pnpm build` passes.
 - `apps/worker`: `PYTHONPATH=src pytest` passes.
+- `docker compose config` passes for both compose files after adding overridable host ports and worker health checks.
 
 ### Qualification tooling now in repo
 
@@ -51,16 +52,15 @@ Branch: `cursor/docx-redline-build`
 ## Remaining Section 23 Gaps
 
 - Hosted deployment evidence is not collected yet.
-- Lighthouse >= 95 is not collected yet.
-- p95 compare <= 6s is not measured yet.
-- Acceptance fixture A1 needs stronger structural-baseline evidence against Word output.
-- Final README polish, screenshots, and public repo metadata still need qualification-grade review.
+- Docker `compose up --build` still needs a clean full-stack pass on a healthy Docker host after a Docker build transport EOF during worker-image build.
+- Acceptance fixture A1 still needs an explicit Word-output structural baseline artifact, not just the repo fixture assertions.
+- Worker image push evidence is not collected yet.
 - Final PR and release qualification verdict are not ready yet.
 
 ## Next Evidence To Collect
 
-1. Capture stable product screenshots for README and QC evidence.
-2. Run Lighthouse against the local or preview deployment.
-3. Measure compare latency on a 1 MB fixture and record p95.
-4. Formalize acceptance-fixture evidence for A1/A2/A3.
+1. Re-run `docker compose up --build` on a healthy host or after the Docker transport issue clears, then verify `http://localhost:<port>` and `/health`.
+2. Capture hosted deployment evidence for the web app and worker API, including 200 responses and release artifact references.
+3. Add or attach the manual Word structural baseline artifact for A1 so the compare sample is anchored to a Word-generated expectation.
+4. Push or document the worker image publication step required by Section 23.15.
 5. Create the release PR once all Section 23 boxes are backed by evidence.

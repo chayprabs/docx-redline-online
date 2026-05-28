@@ -1,0 +1,14 @@
+node_modules
+.next
+coverage
+dist
+docs/qc-artifacts
+apps/web/.next
+apps/web/node_modules
+apps/worker/.pytest_cache
+apps/worker/__pycache__
+**/__pycache__
+**/*.pyc
+.*.log
+.git
+.github
