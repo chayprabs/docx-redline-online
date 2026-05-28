@@ -4,31 +4,46 @@ const routeCards = [
   {
     href: "/docx-redline",
     title: "Redline",
-    detail: "Compare two DOCX files, inspect the redline, and export the result.",
+    detail: "Compare two drafts, review tracked edits, and export a Word-style redline DOCX.",
+    input: "2 DOCX files",
+    output: "Redline DOCX",
+    recommended: "Most direct start",
     tone: "bg-[color:var(--accent)] text-white shadow-[0_18px_40px_rgba(159,42,29,0.22)]",
   },
   {
     href: "/docx-compare",
     title: "Compare view",
-    detail: "Open the side-by-side diff route directly when review is the main task.",
+    detail: "Open the side-by-side HTML review when reading changes matters more than export.",
+    input: "2 DOCX files",
+    output: "HTML review",
+    recommended: null,
     tone: "border border-[color:var(--line)] bg-white/80 text-[color:var(--ink)]",
   },
   {
     href: "/docx-comments-extract",
     title: "Comments",
-    detail: "Extract threads, replies, timestamps, and resolved state from one DOCX.",
+    detail: "Pull comment threads, replies, timestamps, and resolved state from one document.",
+    input: "1 DOCX file",
+    output: "JSON or Markdown",
+    recommended: null,
     tone: "border border-[color:var(--line)] bg-white/80 text-[color:var(--ink)]",
   },
   {
     href: "/docx-to-html",
     title: "To HTML",
-    detail: "Generate clean HTML with images, style maps, and list normalization.",
+    detail: "Generate clean HTML with images, style maps, and normalized list output.",
+    input: "1 DOCX file",
+    output: "HTML package",
+    recommended: null,
     tone: "border border-[color:var(--line)] bg-white/80 text-[color:var(--ink)]",
   },
   {
     href: "/docx-to-markdown",
     title: "To Markdown",
-    detail: "Generate Markdown for content workflows that need cleaner text output.",
+    detail: "Generate Markdown for docs and content workflows that need cleaner text output.",
+    input: "1 DOCX file",
+    output: "Markdown",
+    recommended: null,
     tone: "border border-[color:var(--line)] bg-white/80 text-[color:var(--ink)]",
   },
 ] as const;
@@ -65,12 +80,32 @@ export function PlaygroundLauncher() {
         {routeCards.map((card) => (
           <Link
             key={card.href}
-            className={`rounded-[26px] p-5 transition-transform hover:-translate-y-1 ${card.tone}`}
+            className={`flex min-h-72 flex-col rounded-[26px] p-5 transition-transform hover:-translate-y-1 ${card.tone}`}
             href={card.href}
           >
-            <p className="font-mono text-xs uppercase tracking-[0.22em] opacity-70">Route</p>
-            <h3 className="mt-3 text-xl leading-tight">{card.title}</h3>
-            <p className="mt-3 text-sm leading-7 opacity-80">{card.detail}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.22em] opacity-70">Route</p>
+                <h3 className="mt-3 text-xl leading-tight">{card.title}</h3>
+              </div>
+              {card.recommended ? (
+                <span className="rounded-full border border-current/15 bg-black/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-current/80">
+                  {card.recommended}
+                </span>
+              ) : null}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.18em] opacity-75">
+              <span className="rounded-full border border-current/15 bg-black/5 px-3 py-1">
+                {card.input}
+              </span>
+              <span className="rounded-full border border-current/15 bg-black/5 px-3 py-1">
+                {card.output}
+              </span>
+            </div>
+            <p className="mt-4 text-sm leading-7 opacity-80">{card.detail}</p>
+            <div className="mt-auto pt-6">
+              <span className="text-xs uppercase tracking-[0.22em] opacity-70">Open route</span>
+            </div>
           </Link>
         ))}
       </div>
