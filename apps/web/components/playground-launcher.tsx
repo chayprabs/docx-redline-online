@@ -37,11 +37,11 @@ export function PlaygroundLauncher() {
             Playground
           </p>
           <h2 className="mt-3 text-3xl leading-tight text-[color:var(--ink)]">
-            Choose a mode and load the full interactive workspace on demand.
+            Open the exact workspace you need.
           </h2>
           <p className="mt-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-            This keeps the landing page fast while still giving us the full extract and compare
-            workflows when we need them.
+            Start in extract if you want conversions and metadata from one file. Start in compare
+            if you want the redline, diff panes, and tracked-change actions.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -59,6 +59,21 @@ export function PlaygroundLauncher() {
           >
             Launch compare mode
           </button>
+        </div>
+      </div>
+      <div className="mt-5 grid gap-3 text-sm text-[color:var(--ink-muted)] md:grid-cols-2">
+        <div className="rounded-3xl border border-[color:var(--line)] bg-white/70 p-4">
+          <p className="font-semibold text-[color:var(--ink)]">Extract mode</p>
+          <p className="mt-2 leading-6">
+            HTML, Markdown, comments, tracked changes, controls, assets, and document parts from a
+            single DOCX.
+          </p>
+        </div>
+        <div className="rounded-3xl border border-[color:var(--line)] bg-white/70 p-4">
+          <p className="font-semibold text-[color:var(--ink)]">Compare mode</p>
+          <p className="mt-2 leading-6">
+            Redline DOCX generation, side-by-side diff output, and per-change accept or reject.
+          </p>
         </div>
       </div>
     </section>

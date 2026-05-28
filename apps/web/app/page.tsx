@@ -33,10 +33,28 @@ export default function Home() {
               Compare DOCX versions online and work the redline without Word.
             </h1>
             <p className="mt-4 text-base leading-8 text-[color:var(--ink-muted)]">
-              DocxRedline is an open-source DOCX compare and extraction tool for redlines,
-              tracked changes, comments, HTML conversion, Markdown conversion, and safe
-              content-control replacement.
+              Upload one file to extract clean output, or upload two files to generate a redline,
+              review the changes, and export the result.
             </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {[
+                { step: "1", title: "Choose extract or compare" },
+                { step: "2", title: "Use your DOCX or a sample" },
+                { step: "3", title: "Download or inspect the output" },
+              ].map((item) => (
+                <div
+                  key={item.step}
+                  className="rounded-3xl border border-[color:var(--line)] bg-white/70 px-4 py-4"
+                >
+                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-[color:var(--accent-2)]">
+                    Step {item.step}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--ink)]">
+                    {item.title}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="grid gap-3 text-sm md:min-w-72">
             <Link
@@ -80,6 +98,10 @@ export default function Home() {
           <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
             Included in v1
           </p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:var(--ink-muted)]">
+            The product is centered on a short path: upload, run, review. Everything else supports
+            that flow.
+          </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <div className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-5">
               <h3 className="text-xl text-[color:var(--ink)]">DOCX compare</h3>
@@ -114,12 +136,12 @@ export default function Home() {
 
         <div className="rounded-[30px] border border-[color:var(--line)] bg-[linear-gradient(160deg,rgba(22,74,104,0.92),rgba(9,34,52,0.96))] p-6 text-white shadow-[0_30px_80px_rgba(15,33,48,0.35)]">
           <p className="font-mono text-xs uppercase tracking-[0.28em] text-white/65">
-            Sample fixtures
+            Start fast
           </p>
           <div className="mt-4 space-y-4 text-sm leading-7 text-white/80">
-            <p>Contract draft with tracked changes and redline compare coverage.</p>
-            <p>Manuscript review sample with comment threads, replies, and resolved notes.</p>
-            <p>Illustrated generic DOCX with lists, headings, images, and document parts.</p>
+            <p>Use the contract sample to test compare and redline output in one click.</p>
+            <p>Use the manuscript sample to verify comment threads, replies, and resolved state.</p>
+            <p>Use the illustrated sample to test HTML, Markdown, assets, and document parts.</p>
           </div>
         </div>
       </section>
