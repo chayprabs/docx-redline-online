@@ -26,6 +26,9 @@ Branch: `cursor/docx-redline-build`
 - Release workflow run `26603158009` completed successfully for tag `v0.0.0-qc1`, and its logs show pushed manifests for:
   - `ghcr.io/chayprabs/docx-redline-online-worker:v0.0.0-qc1@sha256:306ac06c931c17084c41ec99fd7a2cae2b0ac61349d63bf46c6802afb06d12d8`
   - `ghcr.io/chayprabs/docx-redline-online-web:v0.0.0-qc1@sha256:094021fabc66fd50f3a17b56c488f6b5da64d6521f38d93ccc86ac34f78496d7`
+- Release workflow run `26604528664` completed successfully for branch tip `ac50340`, and its logs show pushed manifests for:
+  - `ghcr.io/chayprabs/docx-redline-online-worker:sha-ac50340@sha256:c3723d7d355e8eb1784033275d3a13179b48e6e1d4d8809ab312792af4c0d626`
+  - `ghcr.io/chayprabs/docx-redline-online-web:sha-ac50340@sha256:f2ccb624f847d96772dd22052ebad0a646731ad6b72c0bdf38dd7e300f29c2e0`
 
 ### Qualification tooling now in repo
 
@@ -75,11 +78,10 @@ Branch: `cursor/docx-redline-build`
 ## Remaining Section 23 Gaps
 
 - Hosted deployment evidence is not collected yet.
-- Worker image push evidence is strong from the successful tagged release workflow run, but direct registry-read verification is still limited by current package visibility or token permissions.
 - Final PR and release qualification verdict are not ready yet.
 
 ## Next Evidence To Collect
 
 1. Apply the committed Render Blueprint and capture hosted deployment evidence for `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`, including 200 responses.
-2. Supplement the successful release workflow evidence with direct package-registry visibility, or retain the workflow-log digest evidence as the final Section 23.15 proof if registry visibility remains private-by-design.
+2. Decide whether direct package-registry visibility is still needed, or whether the current branch-tip workflow-log digests are sufficient Section 23.15 evidence.
 3. Create the release PR once all Section 23 boxes are backed by evidence.

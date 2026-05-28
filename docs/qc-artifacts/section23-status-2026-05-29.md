@@ -2,9 +2,9 @@
 
 Tool: `DocxRedline`  
 Section: `23.DocxRedline`  
-Repo: `https://github.com/chayprabs/docx-redline-online@05d9252c7c9d3589942b7f78473b5504972e2159`  
+Repo: `https://github.com/chayprabs/docx-redline-online@ac5034037b1106b17e5057a8b6ff5887246ce8cc`  
 Hosted: `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`  
-Run at: `2026-05-29T03:23:00+05:30`  
+Run at: `2026-05-29T03:27:00+05:30`  
 Verifier: `Codex GPT-5`
 
 Counts:
@@ -26,7 +26,9 @@ Strong pass evidence:
 - Performance gates pass locally: Lighthouse `95/100/100/100` on the production build path and compare p95 `5408.29 ms` on a ~1 MB sparse-edit fixture.
 - Acceptance A1, A2, and A3 are codified and passing; the Word baseline artifact at `docs/baselines/contract-redline-a1.md` is `PASS`.
 - Per-sample HTML and Markdown goldens are now committed under `apps/worker/tests/golden/` and enforced by `apps/worker/tests/test_conversion_goldens.py`.
-- Release workflow run `26603158009` published worker and web GHCR manifests for tag `v0.0.0-qc1`.
+- Release workflow run `26604528664` published current-branch GHCR manifests:
+  - `ghcr.io/chayprabs/docx-redline-online-worker:sha-ac50340@sha256:c3723d7d355e8eb1784033275d3a13179b48e6e1d4d8809ab312792af4c0d626`
+  - `ghcr.io/chayprabs/docx-redline-online-web:sha-ac50340@sha256:f2ccb624f847d96772dd22052ebad0a646731ad6b72c0bdf38dd7e300f29c2e0`
 - Local production-style hosted verification now passes via `docs/qc-artifacts/hosted/local.json`, proving the hosted verifier and route inventory are correct before public deployment.
 - A dedicated `verify-hosted` GitHub Actions workflow now exists for future hosted checks, but it will only become dispatchable through GitHub once merged onto the default branch.
 
