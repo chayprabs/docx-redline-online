@@ -9,9 +9,19 @@ const workflowCards = [
     description: "Compare two documents, inspect tracked changes, and export the redline DOCX.",
   },
   {
+    href: "/docx-compare",
+    title: "Inspect the compare view",
+    description: "Open the side-by-side diff route directly when review is the first task.",
+  },
+  {
     href: "/docx-comments-extract",
     title: "Extract comments",
     description: "Pull threads, replies, timestamps, and resolved state into JSON or Markdown.",
+  },
+  {
+    href: "/docx-to-html",
+    title: "Convert to HTML",
+    description: "Generate clean HTML with images, style-map support, and list normalization.",
   },
   {
     href: "/docx-to-markdown",
@@ -58,6 +68,12 @@ export default function Home() {
             >
               Open redline workflow
             </Link>
+            <Link
+              className="rounded-full border border-[color:var(--line)] bg-white/70 px-5 py-3 text-center text-[color:var(--ink-muted)] hover:border-[color:var(--accent-soft)] hover:text-[color:var(--ink)]"
+              href="/docx-comments-extract"
+            >
+              Open extract workflow
+            </Link>
             <a
               className="rounded-full border border-[color:var(--line)] px-5 py-3 text-center text-[color:var(--ink-muted)] hover:border-[color:var(--accent-soft)] hover:text-[color:var(--ink)]"
               href="https://github.com/chayprabs/docx-redline-online"
@@ -70,7 +86,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-4 pt-8 md:grid-cols-3">
+      <section className="grid gap-4 pt-8 md:grid-cols-2 xl:grid-cols-5">
         {workflowCards.map((card) => (
           <Link
             key={card.href}
