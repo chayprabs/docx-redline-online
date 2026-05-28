@@ -838,35 +838,47 @@ export function PlaygroundShell({
     if (compareTab === "Redline") {
       return (
         <div className="space-y-4">
-          <div className="flex flex-wrap gap-3">
-            <button
-              className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
-              disabled={!compareState.redlineFile}
-              onClick={() => {
-                if (compareState.redlineFile) {
-                  downloadBlob(compareState.redlineFile, compareState.redlineFile.name);
-                }
-              }}
-              type="button"
-            >
-              Download redline DOCX
-            </button>
-            <button
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
-              disabled={mutationLoading}
-              onClick={() => mutateRedline("accept")}
-              type="button"
-            >
-              Accept all
-            </button>
-            <button
-              className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
-              disabled={mutationLoading}
-              onClick={() => mutateRedline("reject")}
-              type="button"
-            >
-              Reject all
-            </button>
+          <div className="rounded-3xl border border-[color:var(--line)] bg-white/75 p-4">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.22em] text-[color:var(--accent-2)]">
+                  Redline actions
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[color:var(--ink-muted)]">
+                  Export the current redline as DOCX, or apply a bulk decision before you download.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
+                  disabled={!compareState.redlineFile}
+                  onClick={() => {
+                    if (compareState.redlineFile) {
+                      downloadBlob(compareState.redlineFile, compareState.redlineFile.name);
+                    }
+                  }}
+                  type="button"
+                >
+                  Download redline DOCX
+                </button>
+                <button
+                  className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
+                  disabled={mutationLoading}
+                  onClick={() => mutateRedline("accept")}
+                  type="button"
+                >
+                  Accept all
+                </button>
+                <button
+                  className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
+                  disabled={mutationLoading}
+                  onClick={() => mutateRedline("reject")}
+                  type="button"
+                >
+                  Reject all
+                </button>
+              </div>
+            </div>
           </div>
           <div
             className="rounded-3xl border border-[color:var(--line)] bg-white/80 p-4"
