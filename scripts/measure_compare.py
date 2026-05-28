@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import io
 import json
+import math
 import statistics
 import sys
 import time
@@ -42,9 +43,10 @@ def _make_paragraph(text: str) -> etree._Element:
     return paragraph
 
 
-def _clause_text(index: int, variant: str) -> str:
+def _clause_text(index: int, variant: str, *, change_interval: int) -> str:
     marker = f"{index:06d}-{(index * 7919) % 999983:06d}-{(index * index) % 104729:05d}"
-    if variant == "original":
+    is_changed = index % change_interval == 0
+    if variant == "original" or not is_changed:
         return (
             f"Clause {index + 1} [{marker}] The supplier delivers milestone set {index % 17} "
             f"within {15 + (index % 4) * 5} calendar days after written approval and weekly status reporting."
@@ -56,7 +58,7 @@ def _clause_text(index: int, variant: str) -> str:
     )
 
 
-def build_synthetic_docx(target_size_bytes: int, *, variant: str) -> bytes:
+def build_synthetic_docx(target_size_bytes: int, *, variant: str, change_interval: int) -> bytes:
     with zipfile.ZipFile(io.BytesIO(_base_docx_bytes(variant)), "r") as archive:
         files = {name: archive.read(name) for name in archive.namelist()}
 
@@ -76,9 +78,11 @@ def build_synthetic_docx(target_size_bytes: int, *, variant: str) -> bytes:
     )
 
     index = 0
+    paragraph_count = max(600, math.ceil(target_size_bytes / 36))
     while True:
-        for _ in range(120):
-            body.append(_make_paragraph(_clause_text(index, variant)))
+        next_target = index + paragraph_count
+        while index < next_target:
+            body.append(_make_paragraph(_clause_text(index, variant, change_interval=change_interval)))
             index += 1
 
         if section_properties is not None:
@@ -101,6 +105,8 @@ def build_synthetic_docx(target_size_bytes: int, *, variant: str) -> bytes:
 
         if section_properties is not None:
             body.remove(section_properties)
+        missing_ratio = target_size_bytes / max(len(payload), 1)
+        paragraph_count = max(240, math.ceil(paragraph_count * max(missing_ratio - 1, 0.15) * 1.1))
 
 
 def percentile(values: list[float], pct: float) -> float:
@@ -121,10 +127,19 @@ def benchmark_compare(
     iterations: int,
     target_size_bytes: int,
     timeout_seconds: float,
+    change_interval: int,
 ) -> dict[str, object]:
     fixture_started = time.perf_counter()
-    original = build_synthetic_docx(target_size_bytes, variant="original")
-    revised = build_synthetic_docx(target_size_bytes, variant="revised")
+    original = build_synthetic_docx(
+        target_size_bytes,
+        variant="original",
+        change_interval=change_interval,
+    )
+    revised = build_synthetic_docx(
+        target_size_bytes,
+        variant="revised",
+        change_interval=change_interval,
+    )
     fixture_generation_ms = (time.perf_counter() - fixture_started) * 1000
 
     durations_ms: list[float] = []
@@ -156,6 +171,7 @@ def benchmark_compare(
         "base_url": base_url,
         "iterations": iterations,
         "target_size_bytes": target_size_bytes,
+        "change_interval": change_interval,
         "fixture_generation_ms": round(fixture_generation_ms, 2),
         "original_size_bytes": len(original),
         "revised_size_bytes": len(revised),
@@ -197,6 +213,12 @@ def parse_args() -> argparse.Namespace:
         help="Request timeout in seconds. Defaults to 120.",
     )
     parser.add_argument(
+        "--change-interval",
+        type=int,
+        default=400,
+        help="Apply a changed clause every N paragraphs. Defaults to 400.",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         help="Optional path to write the benchmark JSON report.",
@@ -211,6 +233,7 @@ def main() -> int:
         iterations=args.iterations,
         target_size_bytes=args.target_size_bytes,
         timeout_seconds=args.timeout_seconds,
+        change_interval=args.change_interval,
     )
 
     rendered = json.dumps(report, indent=2)

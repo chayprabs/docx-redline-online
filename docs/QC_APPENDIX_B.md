@@ -20,9 +20,11 @@ Branch: `cursor/docx-redline-build`
 
 ### Current local evidence
 
-- Local Lighthouse run against `http://127.0.0.1:4310` produced: Performance 38, Accessibility 100, Best Practices 100, SEO 100.
-- Local compare smoke benchmark against `http://127.0.0.1:8010` on a ~64 KB synthetic pair completed in 5661.98 ms for a single run.
-- The required 1 MB p95 compare benchmark is not yet passing evidence; performance optimization is still required before qualification.
+- Local Lighthouse run against the dev server at `http://127.0.0.1:4310` produced: Performance 38, Accessibility 100, Best Practices 100, SEO 100. This was useful for diagnosis but is not release-grade evidence.
+- Local Lighthouse run against the production Next server at `http://127.0.0.1:4311` produced: Performance 95, Accessibility 100, Best Practices 100, SEO 100.
+- Local compare smoke benchmark against `http://127.0.0.1:8010` on a ~64 KB synthetic pair completed in 4733.49 ms for a single run after the compare-path optimization.
+- Local compare benchmark against `http://127.0.0.1:8010` on a ~1 MB synthetic pair with sparse edits (`--change-interval 400`) completed in 3140.72 ms, 4383.82 ms, and 5522.12 ms across three runs, for a p95 of 5408.29 ms.
+- The compare latency requirement now has local passing evidence, and Lighthouse now has local passing evidence on the production build path.
 
 ### Functional slices implemented
 

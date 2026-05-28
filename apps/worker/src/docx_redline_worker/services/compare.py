@@ -9,7 +9,6 @@ from difflib import SequenceMatcher
 from lxml import etree
 
 from ..schemas import CompareResponse, HtmlDiffPane, TrackedChangeRecord
-from .conversion import convert_docx_to_html
 
 NS = {
     "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -34,7 +33,9 @@ def _paragraphs(root: etree._Element) -> list[etree._Element]:
 
 
 def _paragraph_text(paragraph: etree._Element) -> str:
-    return "".join(paragraph.xpath(".//w:t/text() | .//w:delText/text()", namespaces=NS)).strip()
+    chunks = [node.text or "" for node in paragraph.iterfind(f".//{{{NS['w']}}}t")]
+    chunks.extend(node.text or "" for node in paragraph.iterfind(f".//{{{NS['w']}}}delText"))
+    return "".join(chunks).strip()
 
 
 def _tokenise(text: str) -> list[str]:
@@ -44,6 +45,9 @@ def _tokenise(text: str) -> list[str]:
 
 
 def _diff_text(before: str, after: str) -> list[tuple[str, str]]:
+    if before == after:
+        return [("equal", before)] if before else []
+
     before_tokens = _tokenise(before)
     after_tokens = _tokenise(after)
     matcher = SequenceMatcher(a=before_tokens, b=after_tokens)
@@ -115,7 +119,21 @@ def _build_paragraph_diffs(before_root: etree._Element, after_root: etree._Eleme
 
 def _render_html_diff(diffs: list[ParagraphDiff]) -> str:
     rows: list[str] = []
+    skipped = 0
     for diff in diffs:
+        if diff.before == diff.after:
+            skipped += 1
+            continue
+
+        if skipped:
+            rows.append(
+                "<div class='diff-row collapsed'>"
+                f"<article class='diff-pane omitted' aria-label='omitted'>{skipped} unchanged paragraphs omitted</article>"
+                f"<article class='diff-pane omitted' aria-label='omitted'>{skipped} unchanged paragraphs omitted</article>"
+                "</div>"
+            )
+            skipped = 0
+
         left_parts: list[str] = []
         right_parts: list[str] = []
         for opcode, value in diff.ops:
@@ -135,16 +153,78 @@ def _render_html_diff(diffs: list[ParagraphDiff]) -> str:
             "</div>"
         )
 
+    if skipped:
+        rows.append(
+            "<div class='diff-row collapsed'>"
+            f"<article class='diff-pane omitted' aria-label='omitted'>{skipped} unchanged paragraphs omitted</article>"
+            f"<article class='diff-pane omitted' aria-label='omitted'>{skipped} unchanged paragraphs omitted</article>"
+            "</div>"
+        )
+
     return (
         "<section class='docxredline-diff'>"
         "<style>"
         ".docxredline-diff{display:grid;gap:12px}"
         ".diff-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}"
         ".diff-pane{border:1px solid #d7d2c8;border-radius:16px;padding:12px;background:#fffdf8}"
+        ".diff-pane.omitted{background:#f4efe5;color:#6f6559;font-style:italic;text-align:center}"
         "del{background:#ffe1dc;text-decoration:line-through}"
         "ins{background:#dff5e4;text-decoration:none}"
         "</style>"
         + "".join(rows)
+        + "</section>"
+    )
+
+
+def _pane_indices(diffs: list[ParagraphDiff], context_radius: int = 1) -> set[int]:
+    indices: set[int] = set()
+    for index, diff in enumerate(diffs):
+        if diff.before == diff.after:
+            continue
+        for context_index in range(max(0, index - context_radius), min(len(diffs), index + context_radius + 1)):
+            indices.add(context_index)
+    return indices
+
+
+def _render_document_pane(diffs: list[ParagraphDiff], *, side: str) -> str:
+    paragraphs = []
+    visible_indices = _pane_indices(diffs)
+    skipped = 0
+    for index, diff in enumerate(diffs):
+        if index not in visible_indices:
+            skipped += 1
+            continue
+
+        if skipped:
+            paragraphs.append(
+                "<p class='docxredline-pane-omitted'>"
+                f"{skipped} unchanged paragraphs omitted"
+                "</p>"
+            )
+            skipped = 0
+
+        text = html.escape(diff.before if side == "before" else diff.after)
+        paragraphs.append(
+            "<p class='docxredline-pane-paragraph'>"
+            f"{text or '&nbsp;'}"
+            "</p>"
+        )
+
+    if skipped:
+        paragraphs.append(
+            "<p class='docxredline-pane-omitted'>"
+            f"{skipped} unchanged paragraphs omitted"
+            "</p>"
+        )
+
+    return (
+        "<section class='docxredline-pane'>"
+        "<style>"
+        ".docxredline-pane{display:grid;gap:12px}"
+        ".docxredline-pane-paragraph{margin:0;line-height:1.7}"
+        ".docxredline-pane-omitted{margin:0;color:#6f6559;font-style:italic;text-align:center}"
+        "</style>"
+        + "".join(paragraphs)
         + "</section>"
     )
 
@@ -202,8 +282,8 @@ def compare_docx(before_bytes: bytes, after_bytes: bytes) -> CompareResponse:
         redline_docx_base64=base64.b64encode(output.getvalue()).decode("ascii"),
         html_diff=_render_html_diff(diffs),
         panes=[
-            HtmlDiffPane(title="Original", html=convert_docx_to_html(before_bytes).html),
-            HtmlDiffPane(title="Revised", html=convert_docx_to_html(after_bytes).html),
+            HtmlDiffPane(title="Original", html=_render_document_pane(diffs, side="before")),
+            HtmlDiffPane(title="Revised", html=_render_document_pane(diffs, side="after")),
         ],
         changes=changes,
     )
