@@ -155,6 +155,10 @@ function formatBytes(size: number) {
   return `${(size / (1024 * 1024)).toFixed(2)} MB`;
 }
 
+function formatCount(count: number, singular: string, plural = `${singular}s`) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
 function downloadBlob(blob: Blob, fileName: string) {
   const objectUrl = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -391,6 +395,23 @@ export function PlaygroundShell({
   const [compareLoading, setCompareLoading] = useState(false);
   const [mutationLoading, setMutationLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const extractSummary = extractState.html
+    ? [
+        formatCount(extractState.html.images.length, "image"),
+        formatCount(extractState.comments?.comments.length ?? 0, "thread"),
+        formatCount(extractState.tracked?.changes.length ?? 0, "change"),
+        formatCount(extractState.controls?.controls.length ?? 0, "control"),
+      ]
+    : [];
+
+  const compareSummary = compareState.compare
+    ? [
+        formatCount(compareState.compare.changes.length, "change"),
+        formatCount(compareState.compare.panes.length, "pane"),
+        compareState.redlineFile ? "redline ready" : "redline pending",
+      ]
+    : [];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -796,9 +817,8 @@ export function PlaygroundShell({
               Word-style redlines without opening Word.
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[color:var(--ink-muted)]">
-              We can now run the real worker workflow from the page: convert DOCX to HTML or
-              Markdown, inspect comments and controls, compare two versions, and accept or reject
-              tracked changes on the generated redline.
+              Upload one DOCX to extract content, or upload two DOCX files to generate a redline,
+              inspect tracked changes, and export the result straight away.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -810,9 +830,9 @@ export function PlaygroundShell({
             >
               GitHub
             </a>
-            <div className="rounded-full border border-[color:var(--line)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[color:var(--ink-muted)]">
-              API {apiBase}
-            </div>
+            <span className="rounded-full bg-[color:var(--surface)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[color:var(--accent-2)]">
+              Worker-backed
+            </span>
           </div>
         </div>
       </header>
@@ -825,8 +845,26 @@ export function PlaygroundShell({
                 Playground
               </p>
               <h2 className="mt-3 text-3xl leading-tight text-[color:var(--ink)]">
-                Extract clean HTML and Markdown, or compare two DOCX versions.
+                Choose a mode, add the file, run it, then review the result.
               </h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  { step: "1", title: "Pick mode", detail: "Extract one DOCX or compare two versions." },
+                  { step: "2", title: "Run worker", detail: "Use a local file or a built-in sample fixture." },
+                  { step: "3", title: "Review output", detail: "Download the redline or inspect each pane." },
+                ].map((item) => (
+                  <div
+                    key={item.step}
+                    className="rounded-3xl border border-[color:var(--line)] bg-white/70 px-4 py-4"
+                  >
+                    <p className="font-mono text-xs uppercase tracking-[0.22em] text-[color:var(--accent-2)]">
+                      Step {item.step}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-[color:var(--ink)]">{item.title}</p>
+                    <p className="mt-1 text-sm leading-6 text-[color:var(--ink-muted)]">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="grid grid-cols-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] p-1">
               <button
@@ -871,6 +909,10 @@ export function PlaygroundShell({
                   onClear={() => setExtractFile(null)}
                 />
                 <Surface eyebrow="Options" title="Conversion controls">
+                  <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
+                    Use the default settings for a straight conversion, or adjust the style map if
+                    you need a more specific heading or paragraph output.
+                  </p>
                   <label className="block text-sm text-[color:var(--ink-muted)]">
                     <span className="font-medium text-[color:var(--ink)]">Style map</span>
                     <textarea
@@ -902,9 +944,29 @@ export function PlaygroundShell({
               </div>
 
               <div className="mt-6 rounded-[28px] border border-[color:var(--line)] bg-[linear-gradient(135deg,rgba(255,255,255,0.5),rgba(255,248,240,0.9))] p-5">
-                <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-                  Result panes
-                </p>
+                <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
+                      Result panes
+                    </p>
+                    <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
+                      HTML and Markdown render first, then you can switch into comments, tracked
+                      changes, assets, and document parts.
+                    </p>
+                  </div>
+                  {extractSummary.length ? (
+                    <div className="flex flex-wrap gap-2">
+                      {extractSummary.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
                 <div className="mt-4">
                   <TabStrip active={extractTab} onSelect={setExtractTab} tabs={extractTabs} />
                 </div>
@@ -940,14 +1002,34 @@ export function PlaygroundShell({
                   {compareLoading ? "Comparing..." : "Run compare"}
                 </button>
                 <span className="text-sm text-[color:var(--ink-muted)]">
-                  After compare, we can inspect the generated redline and apply accept/reject changes in-place.
+                  Compare generates the redline DOCX, a side-by-side HTML diff, and a per-change
+                  action list.
                 </span>
               </div>
 
               <div className="mt-6 rounded-[28px] border border-[color:var(--line)] bg-[linear-gradient(135deg,rgba(255,255,255,0.5),rgba(255,248,240,0.9))] p-5">
-                <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-                  Compare outputs
-                </p>
+                <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
+                      Compare outputs
+                    </p>
+                    <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
+                      Download the redline in DOCX form or move through the HTML diff and change list.
+                    </p>
+                  </div>
+                  {compareSummary.length ? (
+                    <div className="flex flex-wrap gap-2">
+                      {compareSummary.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-[color:var(--line)] bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
                 <div className="mt-4">
                   <TabStrip active={compareTab} onSelect={setCompareTab} tabs={compareTabs} />
                 </div>
@@ -958,6 +1040,27 @@ export function PlaygroundShell({
         </div>
 
         <aside className="space-y-5">
+          <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(145deg,rgba(255,251,245,0.9),rgba(247,239,229,0.95))] p-6 shadow-[0_20px_60px_rgba(71,48,29,0.08)]">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent)]">
+              Quick start
+            </p>
+            <ol className="mt-4 space-y-4 text-sm leading-7 text-[color:var(--ink-muted)]">
+              <li>
+                <span className="font-semibold text-[color:var(--ink)]">Extract:</span> use one
+                file when you need HTML, Markdown, comments, content controls, or embedded assets.
+              </li>
+              <li>
+                <span className="font-semibold text-[color:var(--ink)]">Compare:</span> use two
+                files when you want a redline DOCX and accept or reject decisions.
+              </li>
+              <li>
+                <span className="font-semibold text-[color:var(--ink)]">Samples:</span> start with
+                the built-in fixtures if you want to test the full workflow before uploading your
+                own document.
+              </li>
+            </ol>
+          </section>
+
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[color:var(--surface-elevated)] p-6 shadow-[0_24px_70px_rgba(71,48,29,0.08)]">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent-2)]">
               Sample fixtures
@@ -995,15 +1098,15 @@ export function PlaygroundShell({
 
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(160deg,rgba(22,74,104,0.92),rgba(9,34,52,0.96))] p-6 text-white shadow-[0_30px_80px_rgba(15,33,48,0.35)]">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65">
-              Release gate
+              Why it is direct
             </p>
             <h2 className="mt-3 text-3xl leading-tight">
-              We now have a real worker-backed playground, not just a landing shell.
+              The interface stays focused on the file, the worker run, and the output.
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-white/75">
-              <li>Extract mode calls the full worker stack and exposes every result pane.</li>
-              <li>Compare mode generates a redline DOCX and lets us accept or reject tracked changes.</li>
-              <li>Sample cards now load actual DOCX fixtures from the worker.</li>
+              <li>Extract mode exposes conversions, comments, controls, assets, and document parts in one pass.</li>
+              <li>Compare mode keeps the redline, diff, and change decisions in one place.</li>
+              <li>Each sample card loads a real DOCX fixture from the worker so the path is testable end to end.</li>
             </ul>
           </section>
         </aside>

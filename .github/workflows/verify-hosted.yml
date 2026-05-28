@@ -29,8 +29,8 @@ jobs:
       WEB_URL: ${{ inputs.web_url || 'https://docx-redline.onrender.com' }}
       API_URL: ${{ inputs.api_url || 'https://docx-redline-api.onrender.com' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Verify hosted web and API routes
