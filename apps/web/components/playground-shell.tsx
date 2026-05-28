@@ -424,6 +424,11 @@ export function PlaygroundShell({
   initialCompareTab = "Redline",
   visibleExtractTabs = extractTabs,
   visibleCompareTabs = compareTabs,
+  showExtractConversionControls = true,
+  extractOptionsTitle = "Conversion controls",
+  extractOptionsDescription = "Leave the defaults in place for a straight conversion, or adjust the style map when you need more specific heading and paragraph output.",
+  extractReadyMessage = "Ready to run on the selected DOCX.",
+  extractIdleMessage = "Choose one DOCX or load a sample to enable extract.",
   preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
@@ -440,6 +445,11 @@ export function PlaygroundShell({
   initialCompareTab?: CompareTab;
   visibleExtractTabs?: readonly ExtractTab[];
   visibleCompareTabs?: readonly CompareTab[];
+  showExtractConversionControls?: boolean;
+  extractOptionsTitle?: string;
+  extractOptionsDescription?: string;
+  extractReadyMessage?: string;
+  extractIdleMessage?: string;
   preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
@@ -1256,30 +1266,33 @@ export function PlaygroundShell({
                   onChange={handleExtractFileChange}
                   onClear={() => handleExtractFileChange(null)}
                 />
-                <Surface eyebrow="Options" title="Conversion controls">
+                <Surface eyebrow="Options" title={extractOptionsTitle}>
                   <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
-                    Leave the defaults in place for a straight conversion, or adjust the style map
-                    when you need more specific heading and paragraph output.
+                    {extractOptionsDescription}
                   </p>
-                  <label className="block text-sm text-[color:var(--ink-muted)]">
-                    <span className="font-medium text-[color:var(--ink)]">Style map</span>
-                    <textarea
-                      className="mt-2 min-h-28 w-full rounded-2xl border border-[color:var(--line)] bg-white/80 px-4 py-3 font-mono text-sm text-[color:var(--ink)]"
-                      onChange={(event) => setStyleMap(event.target.value)}
-                      value={styleMap}
-                    />
-                  </label>
-                  <label className="mt-4 flex items-start gap-3 text-sm text-[color:var(--ink-muted)]">
-                    <input
-                      checked={normalizeLists}
-                      className="mt-1"
-                      onChange={(event) => setNormalizeLists(event.target.checked)}
-                      type="checkbox"
-                    />
-                    <span>
-                      Normalize list output for cleaner HTML and Markdown exports.
-                    </span>
-                  </label>
+                  {showExtractConversionControls ? (
+                    <>
+                      <label className="block text-sm text-[color:var(--ink-muted)]">
+                        <span className="font-medium text-[color:var(--ink)]">Style map</span>
+                        <textarea
+                          className="mt-2 min-h-28 w-full rounded-2xl border border-[color:var(--line)] bg-white/80 px-4 py-3 font-mono text-sm text-[color:var(--ink)]"
+                          onChange={(event) => setStyleMap(event.target.value)}
+                          value={styleMap}
+                        />
+                      </label>
+                      <label className="mt-4 flex items-start gap-3 text-sm text-[color:var(--ink-muted)]">
+                        <input
+                          checked={normalizeLists}
+                          className="mt-1"
+                          onChange={(event) => setNormalizeLists(event.target.checked)}
+                          type="checkbox"
+                        />
+                        <span>
+                          Normalize list output for cleaner HTML and Markdown exports.
+                        </span>
+                      </label>
+                    </>
+                  ) : null}
                   <div className="mt-5 flex flex-wrap gap-3">
                     <button
                       className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-sm text-white disabled:opacity-50"
@@ -1300,8 +1313,8 @@ export function PlaygroundShell({
                   </div>
                   <p className="mt-3 text-sm text-[color:var(--ink-muted)]">
                     {extractReady
-                      ? "Ready to run on the selected DOCX."
-                      : "Choose one DOCX or load a sample to enable extract."}
+                      ? extractReadyMessage
+                      : extractIdleMessage}
                   </p>
                 </Surface>
               </div>
