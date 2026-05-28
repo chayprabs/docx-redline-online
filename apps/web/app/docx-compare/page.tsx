@@ -14,6 +14,12 @@ export default function DocxComparePage() {
       initialMode="compare"
       initialCompareTab="Redline"
       visibleCompareTabs={["Redline", "Diff", "Changes"]}
+      compareOriginalTitle="Original DOCX"
+      compareOriginalHelper="Use the earlier version as the baseline for the generated redline."
+      compareRevisedTitle="Revised DOCX"
+      compareRevisedHelper="Add the newer version to generate the redline and side-by-side diff."
+      compareRunLabel="Generate redline"
+      compareLoadingLabel="Generating redline..."
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."

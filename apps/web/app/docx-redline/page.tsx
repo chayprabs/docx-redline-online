@@ -14,6 +14,12 @@ export default function DocxRedlinePage() {
       initialMode="compare"
       initialCompareTab="Changes"
       visibleCompareTabs={["Changes", "Redline"]}
+      compareOriginalTitle="Original DOCX"
+      compareOriginalHelper="Use the earlier version as the baseline for the tracked-change review."
+      compareRevisedTitle="Revised DOCX"
+      compareRevisedHelper="Add the newer version to build the redline and review queue."
+      compareRunLabel="Build review queue"
+      compareLoadingLabel="Building review queue..."
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."

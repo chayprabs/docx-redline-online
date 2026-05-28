@@ -427,8 +427,18 @@ export function PlaygroundShell({
   showExtractConversionControls = true,
   extractOptionsTitle = "Conversion controls",
   extractOptionsDescription = "Leave the defaults in place for a straight conversion, or adjust the style map when you need more specific heading and paragraph output.",
+  extractFileTitle = "Primary file",
+  extractFileHelper = "One file unlocks conversions, comments, tracked changes, controls, assets, and document parts.",
+  extractRunLabel = "Run extract",
+  extractLoadingLabel = "Running extract...",
   extractReadyMessage = "Ready to run on the selected DOCX.",
   extractIdleMessage = "Choose one DOCX or load a sample to enable extract.",
+  compareOriginalTitle = "Original version",
+  compareOriginalHelper = "Use the earlier draft or load the compare sample as the baseline.",
+  compareRevisedTitle = "Revised version",
+  compareRevisedHelper = "Add the newer draft to generate a redline and side-by-side HTML diff.",
+  compareRunLabel = "Run compare",
+  compareLoadingLabel = "Comparing...",
   preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
@@ -448,8 +458,18 @@ export function PlaygroundShell({
   showExtractConversionControls?: boolean;
   extractOptionsTitle?: string;
   extractOptionsDescription?: string;
+  extractFileTitle?: string;
+  extractFileHelper?: string;
+  extractRunLabel?: string;
+  extractLoadingLabel?: string;
   extractReadyMessage?: string;
   extractIdleMessage?: string;
+  compareOriginalTitle?: string;
+  compareOriginalHelper?: string;
+  compareRevisedTitle?: string;
+  compareRevisedHelper?: string;
+  compareRunLabel?: string;
+  compareLoadingLabel?: string;
   preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
@@ -1260,8 +1280,8 @@ export function PlaygroundShell({
             <>
               <div className="mt-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
                 <FileSlot
-                  title="Primary file"
-                  helper="One file unlocks conversions, comments, tracked changes, controls, assets, and document parts."
+                  title={extractFileTitle}
+                  helper={extractFileHelper}
                   file={extractFile}
                   onChange={handleExtractFileChange}
                   onClear={() => handleExtractFileChange(null)}
@@ -1300,7 +1320,7 @@ export function PlaygroundShell({
                       onClick={() => void handleExtractRun()}
                       type="button"
                     >
-                      {extractLoading ? "Running extract..." : "Run extract"}
+                      {extractLoading ? extractLoadingLabel : extractRunLabel}
                     </button>
                     <button
                       className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"
@@ -1343,15 +1363,15 @@ export function PlaygroundShell({
             <>
               <div className="mt-6 grid gap-4 lg:grid-cols-2">
                 <FileSlot
-                  title="Original version"
-                  helper="Use the earlier draft or load the compare sample as the baseline."
+                  title={compareOriginalTitle}
+                  helper={compareOriginalHelper}
                   file={originalFile}
                   onChange={handleOriginalFileChange}
                   onClear={() => handleOriginalFileChange(null)}
                 />
                 <FileSlot
-                  title="Revised version"
-                  helper="Add the newer draft to generate a redline and side-by-side HTML diff."
+                  title={compareRevisedTitle}
+                  helper={compareRevisedHelper}
                   file={revisedFile}
                   onChange={handleRevisedFileChange}
                   onClear={() => handleRevisedFileChange(null)}
@@ -1365,7 +1385,7 @@ export function PlaygroundShell({
                   onClick={() => void handleCompareRun()}
                   type="button"
                 >
-                  {compareLoading ? "Comparing..." : "Run compare"}
+                  {compareLoading ? compareLoadingLabel : compareRunLabel}
                 </button>
                 <button
                   className="rounded-full border border-[color:var(--line)] px-4 py-2 text-sm text-[color:var(--ink-muted)] disabled:opacity-50"

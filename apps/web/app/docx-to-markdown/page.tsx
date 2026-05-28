@@ -14,6 +14,10 @@ export default function DocxToMarkdownPage() {
       initialMode="extract"
       initialExtractTab="Markdown"
       visibleExtractTabs={["Markdown", "HTML", "Assets"]}
+      extractFileTitle="Markdown source DOCX"
+      extractFileHelper="Use one DOCX to generate Markdown and cross-check the rendered structure."
+      extractRunLabel="Generate Markdown"
+      extractLoadingLabel="Generating Markdown..."
       preferredSampleId="generic-images"
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."
