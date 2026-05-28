@@ -15,6 +15,7 @@ Branch: `cursor/docx-redline-build`
 - `docker compose config` passes for both compose files after adding overridable host ports and worker health checks.
 - CI now builds the web image, worker image, and validates `docker compose config` on GitHub Actions.
 - CI run `26604279491` now goes further and successfully boots `docker compose up -d --build`, waits for worker health, waits for the web root, probes `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`, and tears the stack down cleanly.
+- CI run `26604416188` confirms the same compose smoke path still passes on the current branch tip after adding the hosted-verification workflow.
 
 ### Release plumbing
 
@@ -31,6 +32,7 @@ Branch: `cursor/docx-redline-build`
 - `pnpm verify:lighthouse -- --url <web-url> --output <json-path>` writes a Lighthouse JSON report and fails when any Section 23 category scores below 95.
 - `pnpm verify:compare -- --base-url <worker-url> --iterations 7 --output <json-path>` generates synthetic ~1 MB original/revised DOCX fixtures and reports min/median/mean/p95 compare latency.
 - `pnpm verify:hosted -- --web-url <web-url> --api-url <api-url> --output <json-path>` checks the public web routes plus worker `/health`, `/v1/meta`, and `/v1/samples` endpoints for Section 23.15 and 23.17.
+- `.github/workflows/verify-hosted.yml` now provides a dedicated workflow-dispatch entry point for hosted verification once the branch is merged onto the default branch.
 
 ### Current local evidence
 

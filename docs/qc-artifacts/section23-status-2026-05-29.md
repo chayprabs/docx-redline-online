@@ -2,9 +2,9 @@
 
 Tool: `DocxRedline`  
 Section: `23.DocxRedline`  
-Repo: `https://github.com/chayprabs/docx-redline-online@d41bb34177534cc14fa588d539c878474d7cbb62`  
+Repo: `https://github.com/chayprabs/docx-redline-online@05d9252c7c9d3589942b7f78473b5504972e2159`  
 Hosted: `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`  
-Run at: `2026-05-29T03:20:00+05:30`  
+Run at: `2026-05-29T03:23:00+05:30`  
 Verifier: `Codex GPT-5`
 
 Counts:
@@ -22,12 +22,13 @@ Failures:
 
 Strong pass evidence:
 - Build checks pass: `pnpm lint`, `pnpm typecheck`, `pnpm build`, and `apps/worker` `PYTHONPATH=src pytest`.
-- CI run `26604279491` passed the compose smoke path: `docker compose up -d --build`, worker health, web root readiness, `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`.
+- CI runs `26604279491` and `26604416188` passed the compose smoke path: `docker compose up -d --build`, worker health, web root readiness, `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`.
 - Performance gates pass locally: Lighthouse `95/100/100/100` on the production build path and compare p95 `5408.29 ms` on a ~1 MB sparse-edit fixture.
 - Acceptance A1, A2, and A3 are codified and passing; the Word baseline artifact at `docs/baselines/contract-redline-a1.md` is `PASS`.
 - Per-sample HTML and Markdown goldens are now committed under `apps/worker/tests/golden/` and enforced by `apps/worker/tests/test_conversion_goldens.py`.
 - Release workflow run `26603158009` published worker and web GHCR manifests for tag `v0.0.0-qc1`.
 - Local production-style hosted verification now passes via `docs/qc-artifacts/hosted/local.json`, proving the hosted verifier and route inventory are correct before public deployment.
+- A dedicated `verify-hosted` GitHub Actions workflow now exists for future hosted checks, but it will only become dispatchable through GitHub once merged onto the default branch.
 
 Verdict: `NOT QUALIFIED`
 
