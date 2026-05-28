@@ -14,6 +14,7 @@ Branch: `cursor/docx-redline-build`
 - `apps/worker`: `PYTHONPATH=src pytest` passes.
 - `docker compose config` passes for both compose files after adding overridable host ports and worker health checks.
 - CI now builds the web image, worker image, and validates `docker compose config` on GitHub Actions.
+- CI run `26604279491` now goes further and successfully boots `docker compose up -d --build`, waits for worker health, waits for the web root, probes `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`, and tears the stack down cleanly.
 
 ### Release plumbing
 
@@ -72,13 +73,11 @@ Branch: `cursor/docx-redline-build`
 ## Remaining Section 23 Gaps
 
 - Hosted deployment evidence is not collected yet.
-- Docker `compose up --build` still needs a clean full-stack pass on a healthy Docker host because the current local Docker Desktop engine is returning host-level API 500s before any DocxRedline container starts.
 - Worker image push evidence is strong from the successful tagged release workflow run, but direct registry-read verification is still limited by current package visibility or token permissions.
 - Final PR and release qualification verdict are not ready yet.
 
 ## Next Evidence To Collect
 
-1. Re-run `docker compose up --build` on a healthy host or after the Docker transport issue clears, then verify `http://localhost:<port>` and `/health`.
-2. Apply the committed Render Blueprint and capture hosted deployment evidence for `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`, including 200 responses.
-3. Supplement the successful release workflow evidence with direct package-registry visibility, or retain the workflow-log digest evidence as the final Section 23.15 proof if registry visibility remains private-by-design.
-4. Create the release PR once all Section 23 boxes are backed by evidence.
+1. Apply the committed Render Blueprint and capture hosted deployment evidence for `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`, including 200 responses.
+2. Supplement the successful release workflow evidence with direct package-registry visibility, or retain the workflow-log digest evidence as the final Section 23.15 proof if registry visibility remains private-by-design.
+3. Create the release PR once all Section 23 boxes are backed by evidence.
