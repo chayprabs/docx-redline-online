@@ -11,6 +11,11 @@ DocxRedline is an open-source server-side tool to compare DOCX versions online, 
 - Inspect and safely replace structured document tag content controls.
 - View headers, footers, footnotes, endnotes, and embedded objects.
 
+## Screenshots
+
+![DocxRedline landing page](docs/screenshots/home.png)
+![DocxRedline compare workflow](docs/screenshots/compare.png)
+
 ## Workspace
 
 ```text

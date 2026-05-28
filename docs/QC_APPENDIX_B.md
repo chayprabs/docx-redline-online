@@ -40,6 +40,7 @@ Branch: `cursor/docx-redline-build`
 - Sample picker successfully loads extract fixtures from the worker.
 - Extract workflow runs end to end and renders result panes in the browser.
 - Compare workflow runs end to end and renders redline output in the browser.
+- Release screenshots captured at `docs/screenshots/home.png` and `docs/screenshots/compare.png`.
 
 ### Acceptance evidence now codified
 
