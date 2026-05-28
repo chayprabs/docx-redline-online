@@ -1,0 +1,11 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+COPY apps/worker /app
+RUN pip install --upgrade pip && pip install -e ".[dev]"
+
+EXPOSE 8000
+CMD ["uvicorn", "docx_redline_worker.main:app", "--host", "0.0.0.0", "--port", "8000"]

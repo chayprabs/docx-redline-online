@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4efe6;
+  --surface: rgba(255, 252, 247, 0.75);
+  --surface-elevated: rgba(255, 252, 247, 0.92);
+  --ink: #1f1d1a;
+  --ink-muted: #5b5449;
+  --line: rgba(56, 43, 22, 0.12);
+  --accent: #9f2a1d;
+  --accent-soft: #cf6a43;
+  --accent-2: #164a68;
+  --glow: rgba(182, 85, 50, 0.16);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-display), serif;
+  background-image:
+    radial-gradient(circle at top left, rgba(234, 186, 125, 0.35), transparent 35%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5), transparent 55%),
+    linear-gradient(180deg, rgba(255, 248, 239, 0.95), rgba(244, 239, 230, 1));
+}
+
+a,
+button,
+input {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(22, 74, 104, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0ms !important;
+  }
+}

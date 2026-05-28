@@ -1,0 +1,15 @@
+{
+  "name": "@docx-redline/shared-worker-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --emitDeclarationOnly",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node -e \"console.log('shared-worker-runtime: no tests yet')\""
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

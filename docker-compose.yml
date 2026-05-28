@@ -1,0 +1,21 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://worker:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - worker
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      DOCX_REDLINE_ARTIFACT_TTL_SECONDS: 900
+      DOCX_REDLINE_MAX_UPLOAD_MB: 25
+    ports:
+      - "8000:8000"

@@ -1,0 +1,18 @@
+{
+  "name": "docx-redline-online",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Compare DOCX versions online, accept or reject tracked changes, extract comments and convert Word to clean HTML or Markdown.",
+  "packageManager": "pnpm@10.33.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm dev:web",
+    "dev:web": "pnpm --filter @docx-redline/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test"
+  }
+}

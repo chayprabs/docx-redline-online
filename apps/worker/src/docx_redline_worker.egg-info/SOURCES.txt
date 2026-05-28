@@ -1,0 +1,10 @@
+pyproject.toml
+src/docx_redline_worker/__init__.py
+src/docx_redline_worker/config.py
+src/docx_redline_worker/main.py
+src/docx_redline_worker.egg-info/PKG-INFO
+src/docx_redline_worker.egg-info/SOURCES.txt
+src/docx_redline_worker.egg-info/dependency_links.txt
+src/docx_redline_worker.egg-info/requires.txt
+src/docx_redline_worker.egg-info/top_level.txt
+tests/test_health.py
