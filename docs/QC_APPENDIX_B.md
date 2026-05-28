@@ -20,6 +20,7 @@ Branch: `cursor/docx-redline-build`
 - `.github/workflows/release.yml` now publishes tagged or manually triggered web and worker images to GHCR.
 - README documents the expected GHCR image names for release verification.
 - A root `render.yaml` Blueprint now defines a two-service Render deployment path for the Next.js web app plus FastAPI worker.
+- The Render Blueprint now targets the repository default branch `main`, so it matches the intended release path rather than the temporary feature branch.
 - Release workflow run `26603158009` completed successfully for tag `v0.0.0-qc1`, and its logs show pushed manifests for:
   - `ghcr.io/chayprabs/docx-redline-online-worker:v0.0.0-qc1@sha256:306ac06c931c17084c41ec99fd7a2cae2b0ac61349d63bf46c6802afb06d12d8`
   - `ghcr.io/chayprabs/docx-redline-online-web:v0.0.0-qc1@sha256:094021fabc66fd50f3a17b56c488f6b5da64d6521f38d93ccc86ac34f78496d7`
@@ -28,6 +29,7 @@ Branch: `cursor/docx-redline-build`
 
 - `pnpm verify:lighthouse -- --url <web-url> --output <json-path>` writes a Lighthouse JSON report and fails when any Section 23 category scores below 95.
 - `pnpm verify:compare -- --base-url <worker-url> --iterations 7 --output <json-path>` generates synthetic ~1 MB original/revised DOCX fixtures and reports min/median/mean/p95 compare latency.
+- `pnpm verify:hosted -- --web-url <web-url> --api-url <api-url> --output <json-path>` checks the public web routes plus worker `/health`, `/v1/meta`, and `/v1/samples` endpoints for Section 23.15 and 23.17.
 
 ### Current local evidence
 
@@ -38,6 +40,7 @@ Branch: `cursor/docx-redline-build`
 - The compare latency requirement now has local passing evidence, and Lighthouse now has local passing evidence on the production build path.
 - A fresh local `docker compose up --build -d` attempt on May 29, 2026 failed before app startup because the Docker Desktop Linux engine returned host-level `500 Internal Server Error` responses on `/version`, `/info`, and image inspection routes. That is current `VERIFY-DEFERRED` evidence, not an app-stack failure.
 - A fresh anonymous GHCR registry probe on May 29, 2026 returned `DENIED`, so package-public-read evidence is still unavailable from this machine without additional registry permissions.
+- `pnpm verify:hosted -- --web-url http://127.0.0.1:4330 --api-url http://127.0.0.1:8030 --output docs/qc-artifacts/hosted/local.json` now passes against a local production-style stack, proving the hosted verification helper and route inventory are working before a public deploy is applied.
 
 ### Functional slices implemented
 

@@ -1,0 +1,70 @@
+{
+  "web_url": "http://127.0.0.1:4330",
+  "api_url": "http://127.0.0.1:8030",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "web:/",
+      "url": "http://127.0.0.1:4330/",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "web:/docx-compare",
+      "url": "http://127.0.0.1:4330/docx-compare",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "web:/docx-redline",
+      "url": "http://127.0.0.1:4330/docx-redline",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "web:/docx-to-markdown",
+      "url": "http://127.0.0.1:4330/docx-to-markdown",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "web:/docx-to-html",
+      "url": "http://127.0.0.1:4330/docx-to-html",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "web:/docx-comments-extract",
+      "url": "http://127.0.0.1:4330/docx-comments-extract",
+      "status": 200,
+      "ok": true,
+      "detail": "<!DOCTYPE html><html lang=\"en\" class=\"libre_baskerville_f0368751-module__Ltvliq__variable ibm_plex_mono_376257ab-module__Bs602W__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/38df7484fe560b25-s.p.0_h8~hcb-m6kp.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/99e609270109b47d-s.p.16-z~2sp29ex6.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\""
+    },
+    {
+      "name": "api:/health",
+      "url": "http://127.0.0.1:8030/health",
+      "status": 200,
+      "ok": true,
+      "detail": "{\"status\":\"ok\"}"
+    },
+    {
+      "name": "api:/v1/meta",
+      "url": "http://127.0.0.1:8030/v1/meta",
+      "status": 200,
+      "ok": true,
+      "detail": "{\"name\":\"DocxRedline Worker\",\"artifactTtlSeconds\":900,\"maxUploadMb\":25}"
+    },
+    {
+      "name": "api:/v1/samples",
+      "url": "http://127.0.0.1:8030/v1/samples",
+      "status": 200,
+      "ok": true,
+      "detail": "{\"samples\":[{\"id\":\"contract-redline\",\"title\":\"Contract Draft\",\"description\":\"Two legal drafts with tracked edits and formatting changes for compare mode.\",\"recommended_mode\":\"compare\"},{\"id\":\"manuscript-comments\",\"title\":\"Manuscript Review\",\"description\":\"A manuscript fixture with comments, replies, and resolved discussion states.\",\"recommended_mode\":\"extract\"},{\"id\":\"generic-images\",\"title\":\"Illustrated Brief\",\"description\":\"A DOCX fixture with headings, lists, and embedded images for conversion output.\",\""
+    }
+  ]
+}

@@ -86,10 +86,10 @@ The repo now includes a root `render.yaml` Blueprint for a two-service Render de
 
 The web app can now proxy worker requests through `/api/worker`, so the browser no longer needs to call the worker origin directly. On Render, the Blueprint wires `DOCX_REDLINE_WORKER_BASE_URL` from the worker service host and sets `NEXT_PUBLIC_API_BASE_URL=/api/worker`.
 
-To deploy from this branch:
+To deploy after merge:
 
 ```bash
-git push origin cursor/docx-redline-build
+git push origin main
 ```
 
 Then open:
@@ -102,6 +102,12 @@ If Render prompts for values, keep the default service names from `render.yaml` 
 
 - Web: `https://docx-redline.onrender.com`
 - Worker API: `https://docx-redline-api.onrender.com`
+
+Once both services are live, verify the hosted release gate with:
+
+```bash
+pnpm verify:hosted -- --web-url https://docx-redline.onrender.com --api-url https://docx-redline-api.onrender.com --output docs/qc-artifacts/hosted/render.json
+```
 
 ## Verification Commands
 

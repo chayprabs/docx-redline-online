@@ -15,6 +15,7 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "verify:lighthouse": "node scripts/run_lighthouse.mjs",
-    "verify:compare": "python scripts/measure_compare.py"
+    "verify:compare": "python scripts/measure_compare.py",
+    "verify:hosted": "python scripts/verify_hosted.py"
   }
 }
