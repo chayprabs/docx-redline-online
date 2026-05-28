@@ -97,4 +97,23 @@ class CompareResponse(BaseModel):
     changes: list[TrackedChangeRecord]
 
 
+class NamedContent(BaseModel):
+    name: str
+    text: str
+
+
+class EmbeddedObjectRecord(BaseModel):
+    name: str
+    content_type: str
+    size_bytes: int
+
+
+class DocumentElementsResponse(BaseModel):
+    headers: list[NamedContent]
+    footers: list[NamedContent]
+    footnotes: list[NamedContent]
+    endnotes: list[NamedContent]
+    embedded_objects: list[EmbeddedObjectRecord]
+
+
 DocxCommentRecord.model_rebuild()

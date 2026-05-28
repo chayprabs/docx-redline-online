@@ -57,13 +57,23 @@ async def _read_docx(file: UploadFile) -> bytes:
 async def to_html(
     file: UploadFile = File(...),
     style_map: str | None = Form(default=None),
+    normalize_lists: bool = Form(default=False),
 ) -> HtmlConversionResponse:
-    return convert_docx_to_html(await _read_docx(file), style_map=style_map)
+    return convert_docx_to_html(
+        await _read_docx(file),
+        style_map=style_map,
+        normalize_lists=normalize_lists,
+    )
 
 
 @router.post("/to-markdown", response_model=MarkdownConversionResponse)
 async def to_markdown(
     file: UploadFile = File(...),
     style_map: str | None = Form(default=None),
+    normalize_lists: bool = Form(default=False),
 ) -> MarkdownConversionResponse:
-    return convert_docx_to_markdown(await _read_docx(file), style_map=style_map)
+    return convert_docx_to_markdown(
+        await _read_docx(file),
+        style_map=style_map,
+        normalize_lists=normalize_lists,
+    )

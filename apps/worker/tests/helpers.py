@@ -300,3 +300,52 @@ def create_compare_fixtures(original_target: Path, revised_target: Path) -> tupl
     revised.save(revised_target)
 
     return original_target, revised_target
+
+
+def create_document_elements_fixture(target: Path) -> Path:
+    document = Document()
+    section = document.sections[0]
+    section.header.paragraphs[0].text = "Header text"
+    section.footer.paragraphs[0].text = "Footer text"
+    document.add_paragraph("Body text")
+    document.save(target)
+
+    with zipfile.ZipFile(target, "r") as archive:
+        files = {name: archive.read(name) for name in archive.namelist()}
+
+    files["word/footnotes.xml"] = b"""<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:footnote w:id="1"><w:p><w:r><w:t>Footnote text</w:t></w:r></w:p></w:footnote>
+</w:footnotes>
+"""
+    files["word/endnotes.xml"] = b"""<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<w:endnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:endnote w:id="2"><w:p><w:r><w:t>Endnote text</w:t></w:r></w:p></w:endnote>
+</w:endnotes>
+"""
+    files["word/embeddings/sample.bin"] = b"embedded-object"
+
+    content_types = etree.fromstring(files["[Content_Types].xml"])
+    namespace = "http://schemas.openxmlformats.org/package/2006/content-types"
+    for part_name, content_type in [
+        ("/word/footnotes.xml", "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"),
+        ("/word/endnotes.xml", "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"),
+        ("/word/embeddings/sample.bin", "application/octet-stream"),
+    ]:
+        override = etree.SubElement(content_types, f"{{{namespace}}}Override")
+        override.set("PartName", part_name)
+        override.set("ContentType", content_type)
+    files["[Content_Types].xml"] = etree.tostring(
+        content_types,
+        xml_declaration=True,
+        encoding="UTF-8",
+        standalone="yes",
+    )
+
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        for name, data in files.items():
+            archive.writestr(name, data)
+
+    target.write_bytes(output.getvalue())
+    return target

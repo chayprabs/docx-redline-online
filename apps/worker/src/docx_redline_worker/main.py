@@ -5,6 +5,7 @@ from .routers.comments import router as comments_router
 from .routers.compare import router as compare_router
 from .routers.content_controls import router as content_controls_router
 from .routers.convert import router as conversion_router
+from .routers.document_elements import router as document_elements_router
 from .routers.tracked import router as tracked_router
 
 app = FastAPI(
@@ -17,6 +18,7 @@ app.include_router(comments_router)
 app.include_router(tracked_router)
 app.include_router(content_controls_router)
 app.include_router(compare_router)
+app.include_router(document_elements_router)
 
 
 @app.get("/health")

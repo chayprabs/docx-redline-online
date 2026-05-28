@@ -1,6 +1,7 @@
 import base64
 import io
 import mimetypes
+import re
 import shutil
 import subprocess
 import tempfile
@@ -46,12 +47,30 @@ def extract_images(docx_bytes: bytes) -> list[ExtractedImage]:
     return images
 
 
-def convert_docx_to_html(docx_bytes: bytes, style_map: str | None = None) -> HtmlConversionResponse:
+def _normalize_html_lists(value: str) -> str:
+    value = re.sub(r"<(ul|ol)>", r'<\1 data-docxredline-normalized="true">', value)
+    value = re.sub(r"<li>\s+", "<li>", value)
+    value = re.sub(r"\s+</li>", "</li>", value)
+    return value
+
+
+def _normalize_markdown_lists(value: str) -> str:
+    value = re.sub(r"(?m)^\s*[*+]\s+", "- ", value)
+    return value
+
+
+def convert_docx_to_html(
+    docx_bytes: bytes,
+    style_map: str | None = None,
+    normalize_lists: bool = False,
+) -> HtmlConversionResponse:
     with io.BytesIO(docx_bytes) as source:
         result = mammoth.convert_to_html(source, style_map=style_map)
 
+    html = _normalize_html_lists(result.value) if normalize_lists else result.value
+
     return HtmlConversionResponse(
-        html=result.value,
+        html=html,
         images=extract_images(docx_bytes),
         messages=_normalise_messages(result.messages),
     )
@@ -81,6 +100,7 @@ def _run_pandoc(docx_bytes: bytes) -> str | None:
 def convert_docx_to_markdown(
     docx_bytes: bytes,
     style_map: str | None = None,
+    normalize_lists: bool = False,
 ) -> MarkdownConversionResponse:
     try:
         with io.BytesIO(docx_bytes) as source:
@@ -99,6 +119,9 @@ def convert_docx_to_markdown(
                 message="Mammoth markdown conversion failed; pandoc fallback used.",
             )
         ]
+
+    if normalize_lists:
+        markdown = _normalize_markdown_lists(markdown)
 
     return MarkdownConversionResponse(
         markdown=markdown,

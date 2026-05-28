@@ -56,3 +56,19 @@ def test_markdown_conversion_preserves_basic_formatting(tmp_path: Path) -> None:
     assert "italic" in payload["markdown"]
     assert "First bullet" in payload["markdown"]
     assert len(payload["images"]) == 1
+
+
+def test_html_conversion_can_normalize_lists(tmp_path: Path) -> None:
+    docx_path = create_conversion_fixture(tmp_path / "fixture.docx")
+    client = TestClient(app)
+
+    with docx_path.open("rb") as document_file:
+        response = client.post(
+            "/v1/to-html",
+            files={"file": (docx_path.name, document_file, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")},
+            data={"normalize_lists": "true"},
+        )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert 'data-docxredline-normalized="true"' in payload["html"]
