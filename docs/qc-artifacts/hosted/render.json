@@ -1,0 +1,70 @@
+{
+  "web_url": "https://docx-redline.onrender.com",
+  "api_url": "https://docx-redline-api.onrender.com",
+  "all_passed": false,
+  "checks": [
+    {
+      "name": "web:/",
+      "url": "https://docx-redline.onrender.com/",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "web:/docx-compare",
+      "url": "https://docx-redline.onrender.com/docx-compare",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "web:/docx-redline",
+      "url": "https://docx-redline.onrender.com/docx-redline",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "web:/docx-to-markdown",
+      "url": "https://docx-redline.onrender.com/docx-to-markdown",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "web:/docx-to-html",
+      "url": "https://docx-redline.onrender.com/docx-to-html",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "web:/docx-comments-extract",
+      "url": "https://docx-redline.onrender.com/docx-comments-extract",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "api:/health",
+      "url": "https://docx-redline-api.onrender.com/health",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "api:/v1/meta",
+      "url": "https://docx-redline-api.onrender.com/v1/meta",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    },
+    {
+      "name": "api:/v1/samples",
+      "url": "https://docx-redline-api.onrender.com/v1/samples",
+      "status": 404,
+      "ok": false,
+      "detail": "Not Found"
+    }
+  ]
+}

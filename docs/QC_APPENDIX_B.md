@@ -41,6 +41,7 @@ Branch: `cursor/docx-redline-build`
 - A fresh local `docker compose up --build -d` attempt on May 29, 2026 failed before app startup because the Docker Desktop Linux engine returned host-level `500 Internal Server Error` responses on `/version`, `/info`, and image inspection routes. That is current `VERIFY-DEFERRED` evidence, not an app-stack failure.
 - A fresh anonymous GHCR registry probe on May 29, 2026 returned `DENIED`, so package-public-read evidence is still unavailable from this machine without additional registry permissions.
 - `pnpm verify:hosted -- --web-url http://127.0.0.1:4330 --api-url http://127.0.0.1:8030 --output docs/qc-artifacts/hosted/local.json` now passes against a local production-style stack, proving the hosted verification helper and route inventory are working before a public deploy is applied.
+- `pnpm verify:hosted -- --web-url https://docx-redline.onrender.com --api-url https://docx-redline-api.onrender.com --output docs/qc-artifacts/hosted/render.json` currently fails with `404 Not Found` for every checked public web and API route, so the candidate public Render deployment has not been applied successfully yet.
 
 ### Functional slices implemented
 
@@ -64,6 +65,7 @@ Branch: `cursor/docx-redline-build`
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a1_contract_redline_matches_structural_baseline` verifies the shipped contract sample produces structural insertions, deletions, and the added confidentiality paragraph in the generated redline.
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a2_conversion_preserves_formatting` verifies the shipped generic sample preserves heading, bold, italic, list items, and image extraction across HTML and Markdown conversions.
 - `apps/worker/tests/test_acceptance.py::test_acceptance_a3_comments_extract_correctly` verifies the shipped manuscript comments sample preserves author, reply, resolved state, quoted text, and Markdown export content.
+- `apps/worker/tests/test_conversion_goldens.py` now freezes committed HTML and Markdown golden outputs for the shipped `contract-redline`, `manuscript-comments`, and `generic-images` samples.
 - `scripts/build_a1_word_report.py` now generates a Word-backed structural baseline report at `docs/baselines/contract-redline-a1.md` using local Microsoft Word automation.
 - The current A1 baseline artifact is now `PASS` and matches the Word revision inventory exactly for the shipped `contract-redline` sample.
 
