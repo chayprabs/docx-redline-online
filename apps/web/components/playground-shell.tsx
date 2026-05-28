@@ -321,6 +321,32 @@ function MetricPills({ items }: { items: string[] }) {
   );
 }
 
+function WorkflowStatus({
+  items,
+}: {
+  items: Array<{ label: string; value: string; tone: "ready" | "pending" }>;
+}) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-3">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className={`rounded-3xl border px-4 py-4 ${
+            item.tone === "ready"
+              ? "border-[color:var(--accent-soft)] bg-white/80"
+              : "border-[color:var(--line)] bg-[color:var(--surface)]"
+          }`}
+        >
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--ink-muted)]">
+            {item.label}
+          </p>
+          <p className="mt-2 text-sm font-medium text-[color:var(--ink)]">{item.value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function RenderComments({
   comments,
   depth = 0,
@@ -1356,6 +1382,32 @@ export function PlaygroundShell({
                 </Surface>
               </div>
 
+              <div className="mt-6">
+                <WorkflowStatus
+                  items={[
+                    {
+                      label: "DOCX",
+                      value: extractFile ? "File loaded" : "Awaiting file",
+                      tone: extractFile ? "ready" : "pending",
+                    },
+                    {
+                      label: "Run",
+                      value: extractLoading
+                        ? "Running extract"
+                        : extractReady
+                          ? "Ready to run"
+                          : "Needs file",
+                      tone: extractLoading || extractReady ? "ready" : "pending",
+                    },
+                    {
+                      label: "Output",
+                      value: hasExtractResults ? "Results ready" : "No output yet",
+                      tone: hasExtractResults ? "ready" : "pending",
+                    },
+                  ]}
+                />
+              </div>
+
               <div className="mt-6 rounded-[28px] border border-[color:var(--line)] bg-[linear-gradient(135deg,rgba(255,255,255,0.5),rgba(255,248,240,0.9))] p-5">
                 <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
                   <div>
@@ -1416,6 +1468,32 @@ export function PlaygroundShell({
                     ? "Ready to generate the redline DOCX, side-by-side diff, and change list."
                     : "Choose both the original and revised DOCX files to enable compare."}
                 </span>
+              </div>
+
+              <div className="mt-6">
+                <WorkflowStatus
+                  items={[
+                    {
+                      label: "Original",
+                      value: originalFile ? "Loaded" : "Missing",
+                      tone: originalFile ? "ready" : "pending",
+                    },
+                    {
+                      label: "Revised",
+                      value: revisedFile ? "Loaded" : "Missing",
+                      tone: revisedFile ? "ready" : "pending",
+                    },
+                    {
+                      label: "Output",
+                      value: compareLoading
+                        ? "Building redline"
+                        : compareState.compare
+                          ? "Results ready"
+                          : "No output yet",
+                      tone: compareLoading || compareState.compare ? "ready" : "pending",
+                    },
+                  ]}
+                />
               </div>
 
               <div className="mt-6 rounded-[28px] border border-[color:var(--line)] bg-[linear-gradient(135deg,rgba(255,255,255,0.5),rgba(255,248,240,0.9))] p-5">
