@@ -1461,21 +1461,14 @@ export function PlaygroundShell({
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent)]">
               Route guide
             </p>
-            <ol className="mt-4 space-y-3 text-sm leading-7 text-[color:var(--ink-muted)]">
-              <li>
-                <span className="font-semibold text-[color:var(--ink)]">Extract:</span> use one
-                file for HTML, Markdown, comments, controls, and document parts.
-              </li>
-              <li>
-                <span className="font-semibold text-[color:var(--ink)]">Compare:</span> use two
-                files for the redline DOCX, HTML diff, and accept or reject decisions.
-              </li>
-              <li>
-                <span className="font-semibold text-[color:var(--ink)]">Samples:</span> start with
-                the built-in fixtures when you want to test the workflow before uploading your own
-                document.
-              </li>
-            </ol>
+            <h2 className="mt-3 text-2xl leading-tight text-[color:var(--ink)]">
+              {sidebarTitle}
+            </h2>
+            <ul className="mt-4 space-y-2 text-sm leading-7 text-[color:var(--ink-muted)]">
+              {sidebarItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </section>
 
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[color:var(--surface-elevated)] p-6 shadow-[0_24px_70px_rgba(71,48,29,0.08)]">
@@ -1528,19 +1521,6 @@ export function PlaygroundShell({
             </div>
           </section>
 
-          <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(160deg,rgba(22,74,104,0.92),rgba(9,34,52,0.96))] p-6 text-white shadow-[0_30px_80px_rgba(15,33,48,0.35)]">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/65">
-              Route note
-            </p>
-            <h2 className="mt-3 text-2xl leading-tight">
-              {sidebarTitle}
-            </h2>
-            <ul className="mt-4 space-y-2 text-sm leading-7 text-white/75">
-              {sidebarItems.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
         </aside>
       </section>
     </main>
