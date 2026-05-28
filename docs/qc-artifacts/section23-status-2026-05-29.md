@@ -2,9 +2,9 @@
 
 Tool: `DocxRedline`  
 Section: `23.DocxRedline`  
-Repo: `https://github.com/chayprabs/docx-redline-online@ac5034037b1106b17e5057a8b6ff5887246ce8cc`  
+Repo: `https://github.com/chayprabs/docx-redline-online@df665b8`  
 Hosted: `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`  
-Run at: `2026-05-29T03:27:00+05:30`  
+Run at: `2026-05-29T04:35:00+05:30`  
 Verifier: `Codex GPT-5`
 
 Counts:
@@ -31,6 +31,7 @@ Strong pass evidence:
   - `ghcr.io/chayprabs/docx-redline-online-web:sha-ac50340@sha256:f2ccb624f847d96772dd22052ebad0a646731ad6b72c0bdf38dd7e300f29c2e0`
 - Local production-style hosted verification now passes via `docs/qc-artifacts/hosted/local.json`, proving the hosted verifier and route inventory are correct before public deployment.
 - A dedicated `verify-hosted` GitHub Actions workflow now exists for future hosted checks, but it will only become dispatchable through GitHub once merged onto the default branch.
+- `pnpm deploy:render:blueprint` and `docs/HOSTED_DEPLOYMENT_RUNBOOK.md` now reduce the remaining hosted step to a concrete provider-side apply plus a single hosted verification command.
 
 Verdict: `NOT QUALIFIED`
 

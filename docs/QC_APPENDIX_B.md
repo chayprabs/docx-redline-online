@@ -32,10 +32,12 @@ Branch: `cursor/docx-redline-build`
 
 ### Qualification tooling now in repo
 
+- `pnpm deploy:render:blueprint` prints the exact Render Blueprint dashboard URL for the current Git remote.
 - `pnpm verify:lighthouse -- --url <web-url> --output <json-path>` writes a Lighthouse JSON report and fails when any Section 23 category scores below 95.
 - `pnpm verify:compare -- --base-url <worker-url> --iterations 7 --output <json-path>` generates synthetic ~1 MB original/revised DOCX fixtures and reports min/median/mean/p95 compare latency.
 - `pnpm verify:hosted -- --web-url <web-url> --api-url <api-url> --output <json-path>` checks the public web routes plus worker `/health`, `/v1/meta`, and `/v1/samples` endpoints for Section 23.15 and 23.17.
 - `.github/workflows/verify-hosted.yml` now provides a dedicated workflow-dispatch entry point for hosted verification once the branch is merged onto the default branch.
+- `docs/HOSTED_DEPLOYMENT_RUNBOOK.md` now captures the exact provider-side steps required to clear the final hosted evidence gate.
 
 ### Current local evidence
 

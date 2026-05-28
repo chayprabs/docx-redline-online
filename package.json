@@ -14,6 +14,7 @@
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
+    "deploy:render:blueprint": "python scripts/render_blueprint_link.py",
     "verify:lighthouse": "node scripts/run_lighthouse.mjs",
     "verify:compare": "python scripts/measure_compare.py",
     "verify:hosted": "python scripts/verify_hosted.py"

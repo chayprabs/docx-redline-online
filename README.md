@@ -92,10 +92,10 @@ To deploy after merge:
 git push origin main
 ```
 
-Then open:
+Then print the Blueprint deeplink:
 
-```text
-https://dashboard.render.com/blueprint/new?repo=https://github.com/chayprabs/docx-redline-online
+```bash
+pnpm deploy:render:blueprint
 ```
 
 If Render prompts for values, keep the default service names from `render.yaml` so the documented public URLs stay consistent:
@@ -108,6 +108,8 @@ Once both services are live, verify the hosted release gate with:
 ```bash
 pnpm verify:hosted -- --web-url https://docx-redline.onrender.com --api-url https://docx-redline-api.onrender.com --output docs/qc-artifacts/hosted/render.json
 ```
+
+For the full last-mile checklist, see [docs/HOSTED_DEPLOYMENT_RUNBOOK.md](docs/HOSTED_DEPLOYMENT_RUNBOOK.md).
 
 ## Verification Commands
 
@@ -131,4 +133,5 @@ python scripts/build_a1_word_report.py
 
 - Release gate: `RELEASE_QUALIFICATION_CHECKLIST.md` Section 23
 - Working QC appendix: `docs/QC_APPENDIX_B.md`
+- Hosted deploy runbook: `docs/HOSTED_DEPLOYMENT_RUNBOOK.md`
 - Product requirements: `PRODUCT_REQUIREMENTS.md`
