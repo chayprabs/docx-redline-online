@@ -1193,24 +1193,20 @@ export function PlaygroundShell({
                 Playground
               </p>
               <h2 className="mt-3 text-3xl leading-tight text-[color:var(--ink)]">
-                Choose a mode, add the file, run it, then review the result.
+                Choose the route, add the DOCX, run once, then review the output.
               </h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {[
-                  { step: "1", title: "Pick mode", detail: "Extract one DOCX or compare two versions." },
-                  { step: "2", title: "Run worker", detail: "Use a local file or a built-in sample fixture." },
-                  { step: "3", title: "Review output", detail: "Download the redline or inspect each pane." },
+                  "1. Pick extract or compare",
+                  "2. Use your DOCX or a sample",
+                  "3. Download or inspect the result",
                 ].map((item) => (
-                  <div
-                    key={item.step}
-                    className="rounded-3xl border border-[color:var(--line)] bg-white/70 px-4 py-4"
+                  <span
+                    key={item}
+                    className="rounded-full border border-[color:var(--line)] bg-white/75 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"
                   >
-                    <p className="font-mono text-xs uppercase tracking-[0.22em] text-[color:var(--accent-2)]">
-                      Step {item.step}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-[color:var(--ink)]">{item.title}</p>
-                    <p className="mt-1 text-sm leading-6 text-[color:var(--ink-muted)]">{item.detail}</p>
-                  </div>
+                    {item}
+                  </span>
                 ))}
               </div>
             </div>
@@ -1258,8 +1254,8 @@ export function PlaygroundShell({
                 />
                 <Surface eyebrow="Options" title="Conversion controls">
                   <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
-                    Use the default settings for a straight conversion, or adjust the style map if
-                    you need a more specific heading or paragraph output.
+                    Leave the defaults in place for a straight conversion, or adjust the style map
+                    when you need more specific heading and paragraph output.
                   </p>
                   <label className="block text-sm text-[color:var(--ink-muted)]">
                     <span className="font-medium text-[color:var(--ink)]">Style map</span>
@@ -1310,11 +1306,11 @@ export function PlaygroundShell({
                 <div className="flex flex-col gap-3 border-b border-[color:var(--line)] pb-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.28em] text-[color:var(--accent-2)]">
-                      Result panes
+                      Extract output
                     </p>
                     <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
-                      HTML and Markdown render first, then you can switch into comments, tracked
-                      changes, assets, and document parts.
+                      Start with HTML or Markdown, then switch into comments, tracked changes,
+                      controls, assets, and document parts.
                     </p>
                   </div>
                   <MetricPills items={extractSummary} />
@@ -1364,7 +1360,7 @@ export function PlaygroundShell({
                 </button>
                 <span className="text-sm text-[color:var(--ink-muted)]">
                   {compareReady
-                    ? "Compare generates the redline DOCX, a side-by-side HTML diff, and a per-change action list."
+                    ? "Ready to generate the redline DOCX, side-by-side diff, and change list."
                     : "Choose both the original and revised DOCX files to enable compare."}
                 </span>
               </div>
@@ -1376,7 +1372,8 @@ export function PlaygroundShell({
                       Compare outputs
                     </p>
                     <p className="mt-2 text-sm text-[color:var(--ink-muted)]">
-                      Download the redline in DOCX form or move through the HTML diff and change list.
+                      Download the redline DOCX, inspect the HTML diff, or work through the
+                      change list.
                     </p>
                   </div>
                   <MetricPills items={compareSummary} />
@@ -1419,21 +1416,21 @@ export function PlaygroundShell({
 
           <section className="rounded-[32px] border border-[color:var(--line)] bg-[linear-gradient(145deg,rgba(255,251,245,0.9),rgba(247,239,229,0.95))] p-6 shadow-[0_20px_60px_rgba(71,48,29,0.08)]">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--accent)]">
-              Quick start
+              Route guide
             </p>
             <ol className="mt-4 space-y-3 text-sm leading-7 text-[color:var(--ink-muted)]">
               <li>
                 <span className="font-semibold text-[color:var(--ink)]">Extract:</span> use one
-                file when you need HTML, Markdown, comments, content controls, or embedded assets.
+                file for HTML, Markdown, comments, controls, and document parts.
               </li>
               <li>
                 <span className="font-semibold text-[color:var(--ink)]">Compare:</span> use two
-                files when you want a redline DOCX and accept or reject decisions.
+                files for the redline DOCX, HTML diff, and accept or reject decisions.
               </li>
               <li>
                 <span className="font-semibold text-[color:var(--ink)]">Samples:</span> start with
-                the built-in fixtures if you want to test the full workflow before uploading your
-                own document.
+                the built-in fixtures when you want to test the workflow before uploading your own
+                document.
               </li>
             </ol>
           </section>
@@ -1443,8 +1440,7 @@ export function PlaygroundShell({
               Sample fixtures
             </p>
             <p className="mt-3 text-sm leading-6 text-[color:var(--ink-muted)]">
-              Start with a fixture when you want to test the workflow first and upload your own
-              file second.
+              Use a fixture to validate the route quickly, then swap in your own DOCX.
             </p>
             <div className="mt-5 space-y-4">
               {orderedSamples.map((sample) => (
