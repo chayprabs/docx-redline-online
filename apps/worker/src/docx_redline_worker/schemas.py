@@ -34,3 +34,21 @@ class SampleDocument(BaseModel):
 
 class SampleCatalogResponse(BaseModel):
     samples: list[SampleDocument]
+
+
+class DocxCommentRecord(BaseModel):
+    id: str
+    author: str
+    date: str
+    text: str
+    quoted_text: str = ""
+    replies: list["DocxCommentRecord"] = Field(default_factory=list)
+    resolved: bool = False
+
+
+class CommentsResponse(BaseModel):
+    comments: list[DocxCommentRecord]
+    markdown: str
+
+
+DocxCommentRecord.model_rebuild()

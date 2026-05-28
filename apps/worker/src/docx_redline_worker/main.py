@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from .config import settings
+from .routers.comments import router as comments_router
 from .routers.convert import router as conversion_router
 
 app = FastAPI(
@@ -9,6 +10,7 @@ app = FastAPI(
     summary="Server-side DOCX processing worker for redline workflows.",
 )
 app.include_router(conversion_router)
+app.include_router(comments_router)
 
 
 @app.get("/health")
