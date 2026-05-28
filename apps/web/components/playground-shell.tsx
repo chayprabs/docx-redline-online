@@ -424,6 +424,7 @@ export function PlaygroundShell({
   initialCompareTab = "Redline",
   visibleExtractTabs = extractTabs,
   visibleCompareTabs = compareTabs,
+  showModeToggle = true,
   showExtractConversionControls = true,
   extractOptionsTitle = "Conversion controls",
   extractOptionsDescription = "Leave the defaults in place for a straight conversion, or adjust the style map when you need more specific heading and paragraph output.",
@@ -459,6 +460,7 @@ export function PlaygroundShell({
   initialCompareTab?: CompareTab;
   visibleExtractTabs?: readonly ExtractTab[];
   visibleCompareTabs?: readonly CompareTab[];
+  showModeToggle?: boolean;
   showExtractConversionControls?: boolean;
   extractOptionsTitle?: string;
   extractOptionsDescription?: string;
@@ -1252,30 +1254,32 @@ export function PlaygroundShell({
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] p-1">
-              <button
-                className={`rounded-full px-4 py-2 text-sm ${
-                  mode === "extract"
-                    ? "bg-[color:var(--accent)] text-white shadow-[0_14px_30px_rgba(159,42,29,0.22)]"
-                    : "text-[color:var(--ink-muted)]"
-                }`}
-                onClick={() => handleModeChange("extract")}
-                type="button"
-              >
-                Extract
-              </button>
-              <button
-                className={`rounded-full px-4 py-2 text-sm ${
-                  mode === "compare"
-                    ? "bg-[color:var(--accent-2)] text-white shadow-[0_14px_30px_rgba(22,74,104,0.18)]"
-                    : "text-[color:var(--ink-muted)]"
-                }`}
-                onClick={() => handleModeChange("compare")}
-                type="button"
-              >
-                Compare
-              </button>
-            </div>
+            {showModeToggle ? (
+              <div className="grid grid-cols-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] p-1">
+                <button
+                  className={`rounded-full px-4 py-2 text-sm ${
+                    mode === "extract"
+                      ? "bg-[color:var(--accent)] text-white shadow-[0_14px_30px_rgba(159,42,29,0.22)]"
+                      : "text-[color:var(--ink-muted)]"
+                  }`}
+                  onClick={() => handleModeChange("extract")}
+                  type="button"
+                >
+                  Extract
+                </button>
+                <button
+                  className={`rounded-full px-4 py-2 text-sm ${
+                    mode === "compare"
+                      ? "bg-[color:var(--accent-2)] text-white shadow-[0_14px_30px_rgba(22,74,104,0.18)]"
+                      : "text-[color:var(--ink-muted)]"
+                  }`}
+                  onClick={() => handleModeChange("compare")}
+                  type="button"
+                >
+                  Compare
+                </button>
+              </div>
+            ) : null}
           </div>
 
           {errorMessage ? (

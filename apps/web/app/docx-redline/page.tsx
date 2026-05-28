@@ -14,6 +14,7 @@ export default function DocxRedlinePage() {
       initialMode="compare"
       initialCompareTab="Changes"
       visibleCompareTabs={["Changes", "Redline"]}
+      showModeToggle={false}
       compareOriginalTitle="Original DOCX"
       compareOriginalHelper="Use the earlier version as the baseline for the tracked-change review."
       compareRevisedTitle="Revised DOCX"

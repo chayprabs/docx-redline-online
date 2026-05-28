@@ -14,6 +14,7 @@ export default function DocxCommentsExtractPage() {
       initialMode="extract"
       initialExtractTab="Comments"
       visibleExtractTabs={["Comments", "Markdown"]}
+      showModeToggle={false}
       showExtractConversionControls={false}
       extractFileTitle="Comment source DOCX"
       extractFileHelper="Use one DOCX to extract comment threads, replies, timestamps, and resolved state."
