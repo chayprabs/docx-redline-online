@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { startTransition, useEffect, useState, type ReactNode } from "react";
 import { SampleCard } from "@docx-redline/shared-ui";
 import type {
@@ -53,6 +55,14 @@ const extractTabs = [
 ] as const;
 
 const compareTabs = ["Redline", "Diff", "Changes"] as const;
+
+const workflowLinks = [
+  { href: "/docx-compare", label: "Compare" },
+  { href: "/docx-redline", label: "Redline" },
+  { href: "/docx-to-html", label: "To HTML" },
+  { href: "/docx-to-markdown", label: "To Markdown" },
+  { href: "/docx-comments-extract", label: "Comments" },
+] as const;
 
 type ExtractTab = (typeof extractTabs)[number];
 type CompareTab = (typeof compareTabs)[number];
@@ -428,6 +438,7 @@ export function PlaygroundShell({
   const [compareLoading, setCompareLoading] = useState(false);
   const [mutationLoading, setMutationLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const pathname = usePathname();
 
   const extractSummary = extractState.html
     ? [
@@ -865,6 +876,26 @@ export function PlaygroundShell({
             <span className="rounded-full bg-[color:var(--surface)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[color:var(--accent-2)]">
               Worker-backed
             </span>
+          </div>
+        </div>
+        <div className="mt-5 border-t border-[color:var(--line)] pt-4">
+          <div className="flex flex-wrap gap-2">
+            {workflowLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  className={`rounded-full px-4 py-2 text-sm transition-none ${
+                    isActive
+                      ? "bg-[color:var(--accent)] text-white shadow-[0_12px_30px_rgba(159,42,29,0.18)]"
+                      : "border border-[color:var(--line)] bg-white/70 text-[color:var(--ink-muted)] hover:border-[color:var(--accent-soft)] hover:text-[color:var(--ink)]"
+                  }`}
+                  href={link.href}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </header>
