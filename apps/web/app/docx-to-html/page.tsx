@@ -13,6 +13,7 @@ export default function DocxToHtmlPage() {
     <PlaygroundShell
       initialMode="extract"
       initialExtractTab="HTML"
+      preferredSampleId="generic-images"
       heroEyebrow="DOCX to HTML"
       heroTitle="Convert DOCX into clean HTML with images and structure intact."
       heroDescription="Upload one DOCX, run extract, and land directly in the HTML output while keeping comments, assets, controls, and document parts one tab away."

@@ -13,6 +13,7 @@ export default function DocxCommentsExtractPage() {
     <PlaygroundShell
       initialMode="extract"
       initialExtractTab="Comments"
+      preferredSampleId="manuscript-comments"
       heroEyebrow="DOCX Comments Extract"
       heroTitle="Extract comment threads, replies, and resolved state from a DOCX."
       heroDescription="Use one file, run extract once, and land directly in the comments view with quoted text, authors, timestamps, and replies ready to inspect."

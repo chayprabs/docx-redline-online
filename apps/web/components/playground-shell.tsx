@@ -403,6 +403,7 @@ export function PlaygroundShell({
   initialMode = "extract",
   initialExtractTab = "HTML",
   initialCompareTab = "Redline",
+  preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
   heroDescription = "Upload one DOCX to extract content, or upload two DOCX files to generate a redline, inspect tracked changes, and export the result straight away.",
@@ -416,6 +417,7 @@ export function PlaygroundShell({
   initialMode?: "extract" | "compare";
   initialExtractTab?: ExtractTab;
   initialCompareTab?: CompareTab;
+  preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
   heroDescription?: string;
@@ -458,6 +460,18 @@ export function PlaygroundShell({
         compareState.redlineFile ? "redline ready" : "redline pending",
       ]
     : [];
+  const orderedSamples = [...samples].sort((left, right) => {
+    if (!preferredSampleId) {
+      return 0;
+    }
+    if (left.id === preferredSampleId) {
+      return -1;
+    }
+    if (right.id === preferredSampleId) {
+      return 1;
+    }
+    return 0;
+  });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -1173,13 +1187,19 @@ export function PlaygroundShell({
               file second.
             </p>
             <div className="mt-5 space-y-4">
-              {samples.map((sample) => (
+              {orderedSamples.map((sample) => (
                 <SampleCard
                   key={sample.id}
                   title={sample.title}
                   description={sample.description}
                   eyebrow="Built-in sample"
-                  meta={sample.recommended_mode === "compare" ? "Two-file flow" : "One-file flow"}
+                  meta={
+                    sample.id === preferredSampleId
+                      ? "Suggested"
+                      : sample.recommended_mode === "compare"
+                        ? "Two-file flow"
+                        : "One-file flow"
+                  }
                   accent={
                     sample.recommended_mode === "compare"
                       ? "linear-gradient(90deg, #9f2a1d, #cf6a43)"
@@ -1188,7 +1208,9 @@ export function PlaygroundShell({
                   footer={
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-sm text-[color:var(--ink-muted)]">
-                        {sample.recommended_mode === "compare"
+                        {sample.id === preferredSampleId
+                          ? "Best match for this workflow route."
+                          : sample.recommended_mode === "compare"
                           ? "Loads original and revised documents."
                           : "Loads one document into extract mode."}
                       </span>

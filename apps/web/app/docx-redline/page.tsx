@@ -13,6 +13,7 @@ export default function DocxRedlinePage() {
     <PlaygroundShell
       initialMode="compare"
       initialCompareTab="Changes"
+      preferredSampleId="contract-redline"
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."
       heroDescription="Use this view when you care about acceptance decisions first: compare two files, inspect the change list, then accept or reject revisions one by one or in bulk."

@@ -13,6 +13,7 @@ export default function DocxComparePage() {
     <PlaygroundShell
       initialMode="compare"
       initialCompareTab="Redline"
+      preferredSampleId="contract-redline"
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."
       heroDescription="Drop the original and revised versions, run compare once, then move between the redline, side-by-side diff, and per-change review."
