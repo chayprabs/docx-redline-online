@@ -501,6 +501,9 @@ export function PlaygroundShell({
   compareRevisedHelper = "Add the newer draft to generate a redline and side-by-side HTML diff.",
   compareRunLabel = "Run compare",
   compareLoadingLabel = "Comparing...",
+  compareStatusOriginalLabel = "Original",
+  compareStatusRevisedLabel = "Revised",
+  compareStatusOutputLabel = "Output",
   compareStatusOriginalReadyValue = "Loaded",
   compareStatusOriginalIdleValue = "Missing",
   compareStatusRevisedReadyValue = "Loaded",
@@ -565,6 +568,9 @@ export function PlaygroundShell({
   compareRevisedHelper?: string;
   compareRunLabel?: string;
   compareLoadingLabel?: string;
+  compareStatusOriginalLabel?: string;
+  compareStatusRevisedLabel?: string;
+  compareStatusOutputLabel?: string;
   compareStatusOriginalReadyValue?: string;
   compareStatusOriginalIdleValue?: string;
   compareStatusRevisedReadyValue?: string;
@@ -1589,26 +1595,26 @@ export function PlaygroundShell({
 
               <div className="mt-6">
                 <WorkflowStatus
-                  items={[
-                    {
-                      label: "Original",
-                      value: originalFile
-                        ? compareStatusOriginalReadyValue
-                        : compareStatusOriginalIdleValue,
+                    items={[
+                      {
+                        label: compareStatusOriginalLabel,
+                        value: originalFile
+                          ? compareStatusOriginalReadyValue
+                          : compareStatusOriginalIdleValue,
                       tone: originalFile ? "ready" : "pending",
                     },
-                    {
-                      label: "Revised",
-                      value: revisedFile
-                        ? compareStatusRevisedReadyValue
-                        : compareStatusRevisedIdleValue,
+                      {
+                        label: compareStatusRevisedLabel,
+                        value: revisedFile
+                          ? compareStatusRevisedReadyValue
+                          : compareStatusRevisedIdleValue,
                       tone: revisedFile ? "ready" : "pending",
                     },
-                    {
-                      label: "Output",
-                      value: compareLoading
-                        ? compareStatusOutputLoadingValue
-                        : compareState.compare
+                      {
+                        label: compareStatusOutputLabel,
+                        value: compareLoading
+                          ? compareStatusOutputLoadingValue
+                          : compareState.compare
                           ? compareStatusOutputReadyValue
                           : compareStatusOutputIdleValue,
                       tone: compareLoading || compareState.compare ? "ready" : "pending",
