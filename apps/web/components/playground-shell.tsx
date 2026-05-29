@@ -481,6 +481,9 @@ export function PlaygroundShell({
   extractFileHelper = "One file unlocks conversions, comments, tracked changes, controls, assets, and document parts.",
   extractRunLabel = "Run extract",
   extractLoadingLabel = "Running extract...",
+  extractStatusFileLabel = "DOCX",
+  extractStatusRunLabel = "Run",
+  extractStatusOutputLabel = "Output",
   extractOutputTitle = "Extract output",
   extractOutputDescription = "Start with HTML or Markdown, then switch into comments, tracked changes, controls, assets, and document parts.",
   extractEmptyState = "Run the extract workflow to populate HTML, Markdown, comments, tracked changes, content controls, assets, and document-element viewers.",
@@ -528,6 +531,9 @@ export function PlaygroundShell({
   extractFileHelper?: string;
   extractRunLabel?: string;
   extractLoadingLabel?: string;
+  extractStatusFileLabel?: string;
+  extractStatusRunLabel?: string;
+  extractStatusOutputLabel?: string;
   extractOutputTitle?: string;
   extractOutputDescription?: string;
   extractEmptyState?: string;
@@ -1464,12 +1470,12 @@ export function PlaygroundShell({
                 <WorkflowStatus
                   items={[
                     {
-                      label: "DOCX",
+                      label: extractStatusFileLabel,
                       value: extractFile ? "File loaded" : "Awaiting file",
                       tone: extractFile ? "ready" : "pending",
                     },
                     {
-                      label: "Run",
+                      label: extractStatusRunLabel,
                       value: extractLoading
                         ? "Running extract"
                         : extractReady
@@ -1478,7 +1484,7 @@ export function PlaygroundShell({
                       tone: extractLoading || extractReady ? "ready" : "pending",
                     },
                     {
-                      label: "Output",
+                      label: extractStatusOutputLabel,
                       value: hasExtractResults ? "Results ready" : "No output yet",
                       tone: hasExtractResults ? "ready" : "pending",
                     },
