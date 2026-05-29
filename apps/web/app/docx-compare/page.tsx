@@ -22,6 +22,8 @@ export default function DocxComparePage() {
       compareRevisedHelper="Add the newer version to generate the redline and side-by-side diff."
       compareRunLabel="Generate redline"
       compareLoadingLabel="Generating redline..."
+      compareStatusOutputReadyValue="Redline ready"
+      compareStatusOutputLoadingValue="Generating redline"
       compareReadyMessage="Ready to generate the redline, inspect the side-by-side diff, and review individual changes."
       compareIdleMessage="Choose both the original and revised DOCX files to enable compare output."
       compareOutputTitle="Redline results"

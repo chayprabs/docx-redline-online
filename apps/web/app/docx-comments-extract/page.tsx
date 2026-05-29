@@ -24,6 +24,8 @@ export default function DocxCommentsExtractPage() {
       extractStatusFileLabel="Source"
       extractStatusRunLabel="Run"
       extractStatusOutputLabel="Threads"
+      extractStatusRunReadyValue="Ready to extract"
+      extractStatusOutputReadyValue="Threads ready"
       extractOutputTitle="Comment results"
       extractOutputDescription="Start in comments, then use Markdown export when you need a portable review summary."
       extractEmptyState="Extract comments to load the thread view and the Markdown-ready review summary."

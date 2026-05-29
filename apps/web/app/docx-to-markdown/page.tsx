@@ -23,6 +23,8 @@ export default function DocxToMarkdownPage() {
       extractStatusFileLabel="Source"
       extractStatusRunLabel="Run"
       extractStatusOutputLabel="Markdown"
+      extractStatusRunReadyValue="Ready to generate"
+      extractStatusOutputReadyValue="Markdown ready"
       extractOutputTitle="Markdown results"
       extractOutputDescription="Start in Markdown, then switch into HTML or assets when you need to verify the document structure."
       extractEmptyState="Generate Markdown to load the export, the HTML cross-check, and extracted assets."

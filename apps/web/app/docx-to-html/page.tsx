@@ -23,6 +23,8 @@ export default function DocxToHtmlPage() {
       extractStatusFileLabel="Source"
       extractStatusRunLabel="Run"
       extractStatusOutputLabel="HTML"
+      extractStatusRunReadyValue="Ready to generate"
+      extractStatusOutputReadyValue="HTML ready"
       extractOutputTitle="HTML results"
       extractOutputDescription="Start in HTML, then switch into assets and document parts when you need to inspect the source structure."
       extractEmptyState="Generate HTML to load the rendered output, extracted assets, and document parts."

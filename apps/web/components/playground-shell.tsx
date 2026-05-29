@@ -484,6 +484,12 @@ export function PlaygroundShell({
   extractStatusFileLabel = "DOCX",
   extractStatusRunLabel = "Run",
   extractStatusOutputLabel = "Output",
+  extractStatusFileReadyValue = "File loaded",
+  extractStatusFileIdleValue = "Awaiting file",
+  extractStatusRunReadyValue = "Ready to run",
+  extractStatusRunIdleValue = "Needs file",
+  extractStatusOutputReadyValue = "Results ready",
+  extractStatusOutputIdleValue = "No output yet",
   extractOutputTitle = "Extract output",
   extractOutputDescription = "Start with HTML or Markdown, then switch into comments, tracked changes, controls, assets, and document parts.",
   extractEmptyState = "Run the extract workflow to populate HTML, Markdown, comments, tracked changes, content controls, assets, and document-element viewers.",
@@ -495,6 +501,13 @@ export function PlaygroundShell({
   compareRevisedHelper = "Add the newer draft to generate a redline and side-by-side HTML diff.",
   compareRunLabel = "Run compare",
   compareLoadingLabel = "Comparing...",
+  compareStatusOriginalReadyValue = "Loaded",
+  compareStatusOriginalIdleValue = "Missing",
+  compareStatusRevisedReadyValue = "Loaded",
+  compareStatusRevisedIdleValue = "Missing",
+  compareStatusOutputReadyValue = "Results ready",
+  compareStatusOutputIdleValue = "No output yet",
+  compareStatusOutputLoadingValue = "Building redline",
   compareReadyMessage = "Ready to generate the redline DOCX, side-by-side diff, and change list.",
   compareIdleMessage = "Choose both the original and revised DOCX files to enable compare.",
   compareOutputTitle = "Compare outputs",
@@ -534,6 +547,12 @@ export function PlaygroundShell({
   extractStatusFileLabel?: string;
   extractStatusRunLabel?: string;
   extractStatusOutputLabel?: string;
+  extractStatusFileReadyValue?: string;
+  extractStatusFileIdleValue?: string;
+  extractStatusRunReadyValue?: string;
+  extractStatusRunIdleValue?: string;
+  extractStatusOutputReadyValue?: string;
+  extractStatusOutputIdleValue?: string;
   extractOutputTitle?: string;
   extractOutputDescription?: string;
   extractEmptyState?: string;
@@ -545,6 +564,13 @@ export function PlaygroundShell({
   compareRevisedHelper?: string;
   compareRunLabel?: string;
   compareLoadingLabel?: string;
+  compareStatusOriginalReadyValue?: string;
+  compareStatusOriginalIdleValue?: string;
+  compareStatusRevisedReadyValue?: string;
+  compareStatusRevisedIdleValue?: string;
+  compareStatusOutputReadyValue?: string;
+  compareStatusOutputIdleValue?: string;
+  compareStatusOutputLoadingValue?: string;
   compareReadyMessage?: string;
   compareIdleMessage?: string;
   compareOutputTitle?: string;
@@ -1471,7 +1497,7 @@ export function PlaygroundShell({
                   items={[
                     {
                       label: extractStatusFileLabel,
-                      value: extractFile ? "File loaded" : "Awaiting file",
+                      value: extractFile ? extractStatusFileReadyValue : extractStatusFileIdleValue,
                       tone: extractFile ? "ready" : "pending",
                     },
                     {
@@ -1479,13 +1505,15 @@ export function PlaygroundShell({
                       value: extractLoading
                         ? "Running extract"
                         : extractReady
-                          ? "Ready to run"
-                          : "Needs file",
+                          ? extractStatusRunReadyValue
+                          : extractStatusRunIdleValue,
                       tone: extractLoading || extractReady ? "ready" : "pending",
                     },
                     {
                       label: extractStatusOutputLabel,
-                      value: hasExtractResults ? "Results ready" : "No output yet",
+                      value: hasExtractResults
+                        ? extractStatusOutputReadyValue
+                        : extractStatusOutputIdleValue,
                       tone: hasExtractResults ? "ready" : "pending",
                     },
                   ]}
@@ -1562,21 +1590,25 @@ export function PlaygroundShell({
                   items={[
                     {
                       label: "Original",
-                      value: originalFile ? "Loaded" : "Missing",
+                      value: originalFile
+                        ? compareStatusOriginalReadyValue
+                        : compareStatusOriginalIdleValue,
                       tone: originalFile ? "ready" : "pending",
                     },
                     {
                       label: "Revised",
-                      value: revisedFile ? "Loaded" : "Missing",
+                      value: revisedFile
+                        ? compareStatusRevisedReadyValue
+                        : compareStatusRevisedIdleValue,
                       tone: revisedFile ? "ready" : "pending",
                     },
                     {
                       label: "Output",
                       value: compareLoading
-                        ? "Building redline"
+                        ? compareStatusOutputLoadingValue
                         : compareState.compare
-                          ? "Results ready"
-                          : "No output yet",
+                          ? compareStatusOutputReadyValue
+                          : compareStatusOutputIdleValue,
                       tone: compareLoading || compareState.compare ? "ready" : "pending",
                     },
                   ]}
