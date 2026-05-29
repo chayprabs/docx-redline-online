@@ -21,4 +21,4 @@ ENV NODE_ENV=production
 RUN corepack enable
 COPY --from=builder /app ./
 EXPOSE 3000
-CMD ["pnpm", "--filter", "@docx-redline/web", "start"]
+CMD ["sh", "-c", "cd apps/web && node ./node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port ${PORT:-3000}"]
