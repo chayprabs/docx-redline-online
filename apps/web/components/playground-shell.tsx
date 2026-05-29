@@ -529,6 +529,7 @@ export function PlaygroundShell({
     "2. Use your DOCX or a sample",
     "3. Download or inspect the result",
   ],
+  suggestedSampleButtonLabel = "Load suggested sample",
 }: {
   initialMode?: "extract" | "compare";
   initialExtractTab?: ExtractTab;
@@ -584,6 +585,7 @@ export function PlaygroundShell({
   sidebarItems?: string[];
   workflowTitle?: string;
   workflowSteps?: string[];
+  suggestedSampleButtonLabel?: string;
 }) {
   const [mode, setMode] = useState<"extract" | "compare">(initialMode);
   const [extractTab, setExtractTab] = useState<ExtractTab>(initialExtractTab);
@@ -1423,7 +1425,7 @@ export function PlaygroundShell({
                   onClick={() => void handleSampleLoad(preferredSample)}
                   type="button"
                 >
-                  {sampleLoadingId === preferredSample.id ? "Loading sample..." : "Load suggested sample"}
+                  {sampleLoadingId === preferredSample.id ? "Loading sample..." : suggestedSampleButtonLabel}
                 </button>
               </div>
             </div>

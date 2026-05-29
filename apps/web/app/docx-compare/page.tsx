@@ -30,6 +30,7 @@ export default function DocxComparePage() {
       compareOutputDescription="Start with the exported redline, then move into the HTML diff or change list for review."
       compareEmptyState="Generate the redline to unlock the DOCX export, side-by-side diff, and change list."
       preferredSampleId="contract-redline"
+      suggestedSampleButtonLabel="Load compare sample"
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."
       heroDescription="Drop the original and revised versions, run compare once, then move between the redline, side-by-side diff, and per-change review."

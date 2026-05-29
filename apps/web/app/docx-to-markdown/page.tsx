@@ -31,6 +31,7 @@ export default function DocxToMarkdownPage() {
       extractReadyMessage="Ready to generate Markdown from the selected DOCX."
       extractIdleMessage="Choose one DOCX or load the illustrated sample to enable Markdown generation."
       preferredSampleId="generic-images"
+      suggestedSampleButtonLabel="Load Markdown sample"
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."
       heroDescription="Start in the Markdown pane, keep the style map close by, and use list normalization when you want a cleaner export for docs or repositories."

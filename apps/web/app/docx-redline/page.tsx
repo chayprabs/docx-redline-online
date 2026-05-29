@@ -30,6 +30,7 @@ export default function DocxRedlinePage() {
       compareOutputDescription="Start in the change queue, then switch to the redline export when you are ready to download the reviewed document."
       compareEmptyState="Build the review queue to load the tracked-change list and the reviewed redline export."
       preferredSampleId="contract-redline"
+      suggestedSampleButtonLabel="Load review sample"
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."
       heroDescription="Use this view when you care about acceptance decisions first: compare two files, inspect the change list, then accept or reject revisions one by one or in bulk."

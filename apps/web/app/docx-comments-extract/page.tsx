@@ -34,6 +34,7 @@ export default function DocxCommentsExtractPage() {
       extractReadyMessage="Ready to extract comments from the selected DOCX."
       extractIdleMessage="Choose one DOCX or load the manuscript sample to enable comment extraction."
       preferredSampleId="manuscript-comments"
+      suggestedSampleButtonLabel="Load comment sample"
       heroEyebrow="DOCX Comments Extract"
       heroTitle="Extract comment threads, replies, and resolved state from a DOCX."
       heroDescription="Use one file, run extract once, and land directly in the comments view with quoted text, authors, timestamps, and replies ready to inspect."

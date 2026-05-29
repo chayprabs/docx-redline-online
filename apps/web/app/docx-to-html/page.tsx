@@ -31,6 +31,7 @@ export default function DocxToHtmlPage() {
       extractReadyMessage="Ready to generate HTML from the selected DOCX."
       extractIdleMessage="Choose one DOCX or load the illustrated sample to enable HTML generation."
       preferredSampleId="generic-images"
+      suggestedSampleButtonLabel="Load HTML sample"
       heroEyebrow="DOCX to HTML"
       heroTitle="Convert DOCX into clean HTML with images and structure intact."
       heroDescription="Upload one DOCX, run extract, and land directly in the HTML output while keeping comments, assets, controls, and document parts one tab away."
