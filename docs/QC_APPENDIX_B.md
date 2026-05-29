@@ -16,6 +16,8 @@ Branch: `cursor/docx-redline-build`
 - CI now builds the web image, worker image, and validates `docker compose config` on GitHub Actions.
 - CI run `26604279491` now goes further and successfully boots `docker compose up -d --build`, waits for worker health, waits for the web root, probes `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`, and tears the stack down cleanly.
 - CI run `26604416188` confirms the same compose smoke path still passes on the current branch tip after adding the hosted-verification workflow.
+- CI run `26610605090` confirms the branch still passes after the Windows-safe lint invocation change and compare-status copy refinement.
+- CI run `26610719241` confirms the branch still passes after the Render-facing web container bind fix.
 
 ### Release plumbing
 
@@ -50,6 +52,7 @@ Branch: `cursor/docx-redline-build`
 - A fresh anonymous GHCR registry probe on May 29, 2026 returned `DENIED`, so package-public-read evidence is still unavailable from this machine without additional registry permissions.
 - `pnpm verify:hosted -- --web-url http://127.0.0.1:4330 --api-url http://127.0.0.1:8030 --output docs/qc-artifacts/hosted/local.json` now passes against a local production-style stack, proving the hosted verification helper and route inventory are working before a public deploy is applied.
 - `pnpm verify:hosted -- --web-url https://docx-redline.onrender.com --api-url https://docx-redline-api.onrender.com --output docs/qc-artifacts/hosted/render.json` currently fails with `404 Not Found` for every checked public web and API route, so the candidate public Render deployment has not been applied successfully yet.
+- The current workspace still has no direct Render provider access: `render` CLI is not installed, `render whoami -o json` cannot run, and `RENDER_API_KEY` is not set.
 
 ### Functional slices implemented
 
@@ -67,6 +70,7 @@ Branch: `cursor/docx-redline-build`
 - Compare workflow runs end to end and renders redline output in the browser.
 - Release screenshots captured at `docs/screenshots/home.png` and `docs/screenshots/compare.png`.
 - The web app now supports same-origin worker proxying through `/api/worker`, which reduces hosted deployment friction by avoiding browser-to-worker cross-origin requirements.
+- The web container now binds `0.0.0.0` and respects `${PORT:-3000}` so the Render web service can attach to the provider-assigned port correctly once the Blueprint is applied.
 
 ### Acceptance evidence now codified
 
@@ -85,5 +89,6 @@ Branch: `cursor/docx-redline-build`
 ## Next Evidence To Collect
 
 1. Apply the committed Render Blueprint and capture hosted deployment evidence for `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`, including 200 responses.
-2. Decide whether direct package-registry visibility is still needed, or whether the current branch-tip workflow-log digests are sufficient Section 23.15 evidence.
-3. Create the release PR once all Section 23 boxes are backed by evidence.
+2. Provide Render access in the verification environment, or apply the deployment externally, because this workspace currently has no Render CLI or API key.
+3. Decide whether direct package-registry visibility is still needed, or whether the current branch-tip workflow-log digests are sufficient Section 23.15 evidence.
+4. Create the release PR once all Section 23 boxes are backed by evidence.

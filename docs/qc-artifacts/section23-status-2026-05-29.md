@@ -2,9 +2,9 @@
 
 Tool: `DocxRedline`  
 Section: `23.DocxRedline`  
-Repo: `https://github.com/chayprabs/docx-redline-online@df665b8`  
+Repo: `https://github.com/chayprabs/docx-redline-online@092b917`  
 Hosted: `https://docx-redline.onrender.com` and `https://docx-redline-api.onrender.com`  
-Run at: `2026-05-29T04:35:00+05:30`  
+Run at: `2026-05-29T06:10:00+05:30`  
 Verifier: `Codex GPT-5`
 
 Counts:
@@ -23,6 +23,7 @@ Failures:
 Strong pass evidence:
 - Build checks pass: `pnpm lint`, `pnpm typecheck`, `pnpm build`, and `apps/worker` `PYTHONPATH=src pytest`.
 - CI runs `26604279491` and `26604416188` passed the compose smoke path: `docker compose up -d --build`, worker health, web root readiness, `GET /`, `GET /docx-compare`, `GET /v1/meta`, and `GET /v1/samples`.
+- CI runs `26610605090`, `26610606249`, `26610719241`, and `26610720341` passed on the current branch line after the latest UI polish, lint stabilization, and Render bind hardening.
 - Performance gates pass locally: Lighthouse `95/100/100/100` on the production build path and compare p95 `5408.29 ms` on a ~1 MB sparse-edit fixture.
 - Acceptance A1, A2, and A3 are codified and passing; the Word baseline artifact at `docs/baselines/contract-redline-a1.md` is `PASS`.
 - Per-sample HTML and Markdown goldens are now committed under `apps/worker/tests/golden/` and enforced by `apps/worker/tests/test_conversion_goldens.py`.
@@ -32,9 +33,12 @@ Strong pass evidence:
 - Local production-style hosted verification now passes via `docs/qc-artifacts/hosted/local.json`, proving the hosted verifier and route inventory are correct before public deployment.
 - A dedicated `verify-hosted` GitHub Actions workflow now exists for future hosted checks, but it will only become dispatchable through GitHub once merged onto the default branch.
 - `pnpm deploy:render:blueprint` and `docs/HOSTED_DEPLOYMENT_RUNBOOK.md` now reduce the remaining hosted step to a concrete provider-side apply plus a single hosted verification command.
+- The web Docker image now binds `0.0.0.0` and respects `${PORT:-3000}`, which is the latest repo-side Render startup hardening.
+- The remaining hosted blocker is external from this workspace: `render` CLI is unavailable here, `RENDER_API_KEY` is missing, and both public Render URLs still return `404`.
 
 Verdict: `NOT QUALIFIED`
 
 Action:
 - Apply the committed Render Blueprint or another equivalent hosted deployment so the public web and API URLs return `200`.
+- Provide Render provider access in the environment used for verification, or apply the deployment externally, so hosted verification can actually be completed.
 - Re-run the hosted verification after deployment and then re-run the full Section 23 audit.
