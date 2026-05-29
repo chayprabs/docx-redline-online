@@ -28,6 +28,12 @@ export default function DocxComparePage() {
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."
       heroDescription="Drop the original and revised versions, run compare once, then move between the redline, side-by-side diff, and per-change review."
+      workflowTitle="Load both DOCX files, generate the redline, then inspect the output."
+      workflowSteps={[
+        "1. Load original and revised DOCX",
+        "2. Generate the redline",
+        "3. Review or export the result",
+      ]}
       sidebarTitle="This route is tuned for review work, not general conversion."
       sidebarItems={[
         "Start with the contract sample if you want a fast end-to-end compare check.",

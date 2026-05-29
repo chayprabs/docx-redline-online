@@ -503,6 +503,12 @@ export function PlaygroundShell({
     "Compare mode keeps the redline, diff, and change decisions in one place.",
     "Each sample card loads a real DOCX fixture from the worker so the path is testable end to end.",
   ],
+  workflowTitle = "Choose the route, add the DOCX, run once, then review the output.",
+  workflowSteps = [
+    "1. Pick extract or compare",
+    "2. Use your DOCX or a sample",
+    "3. Download or inspect the result",
+  ],
 }: {
   initialMode?: "extract" | "compare";
   initialExtractTab?: ExtractTab;
@@ -536,6 +542,8 @@ export function PlaygroundShell({
   heroDescription?: string;
   sidebarTitle?: string;
   sidebarItems?: string[];
+  workflowTitle?: string;
+  workflowSteps?: string[];
 }) {
   const [mode, setMode] = useState<"extract" | "compare">(initialMode);
   const [extractTab, setExtractTab] = useState<ExtractTab>(initialExtractTab);
@@ -1298,14 +1306,10 @@ export function PlaygroundShell({
                 Playground
               </p>
               <h2 className="mt-3 text-3xl leading-tight text-[color:var(--ink)]">
-                Choose the route, add the DOCX, run once, then review the output.
+                {workflowTitle}
               </h2>
               <div className="mt-4 flex flex-wrap gap-2">
-                {[
-                  "1. Pick extract or compare",
-                  "2. Use your DOCX or a sample",
-                  "3. Download or inspect the result",
-                ].map((item) => (
+                {workflowSteps.map((item) => (
                   <span
                     key={item}
                     className="rounded-full border border-[color:var(--line)] bg-white/75 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)]"

@@ -26,6 +26,12 @@ export default function DocxToMarkdownPage() {
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."
       heroDescription="Start in the Markdown pane, keep the style map close by, and use list normalization when you want a cleaner export for docs or repositories."
+      workflowTitle="Load one DOCX, generate Markdown, then verify the export."
+      workflowSteps={[
+        "1. Load one DOCX file",
+        "2. Generate Markdown",
+        "3. Review Markdown and structure",
+      ]}
       sidebarTitle="This route is tuned for Markdown-first export work."
       sidebarItems={[
         "Markdown opens first so the content export is immediately visible.",

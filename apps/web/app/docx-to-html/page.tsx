@@ -26,6 +26,12 @@ export default function DocxToHtmlPage() {
       heroEyebrow="DOCX to HTML"
       heroTitle="Convert DOCX into clean HTML with images and structure intact."
       heroDescription="Upload one DOCX, run extract, and land directly in the HTML output while keeping comments, assets, controls, and document parts one tab away."
+      workflowTitle="Load one DOCX, generate HTML, then inspect the output and assets."
+      workflowSteps={[
+        "1. Load one DOCX file",
+        "2. Generate HTML",
+        "3. Review HTML, assets, and parts",
+      ]}
       sidebarTitle="This route is focused on conversion output first."
       sidebarItems={[
         "The HTML tab opens first so you can inspect the rendered output immediately.",

@@ -28,6 +28,12 @@ export default function DocxRedlinePage() {
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."
       heroDescription="Use this view when you care about acceptance decisions first: compare two files, inspect the change list, then accept or reject revisions one by one or in bulk."
+      workflowTitle="Add the two DOCX files, build the review queue, then work through the tracked changes."
+      workflowSteps={[
+        "1. Load original and revised DOCX",
+        "2. Build the review queue",
+        "3. Accept, reject, or export",
+      ]}
       sidebarTitle="This route starts in the tracked-change workflow."
       sidebarItems={[
         "The change list opens first so the review queue is immediately visible.",

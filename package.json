@@ -10,9 +10,9 @@
   "scripts": {
     "dev": "pnpm dev:web",
     "dev:web": "pnpm --filter @docx-redline/web dev",
-    "build": "pnpm -r build",
-    "lint": "pnpm -r --workspace-concurrency=1 lint",
-    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
+    "build": "pnpm --filter @docx-redline/shared-types build && pnpm --filter @docx-redline/shared-ui build && pnpm --filter @docx-redline/shared-worker-runtime build && pnpm --filter @docx-redline/web build",
+    "lint": "pnpm --filter @docx-redline/shared-types lint && pnpm --filter @docx-redline/shared-ui lint && pnpm --filter @docx-redline/shared-worker-runtime lint && pnpm --filter @docx-redline/web lint",
+    "typecheck": "pnpm --filter @docx-redline/shared-types typecheck && pnpm --filter @docx-redline/shared-ui typecheck && pnpm --filter @docx-redline/shared-worker-runtime typecheck && pnpm --filter @docx-redline/web typecheck",
     "test": "pnpm -r test",
     "deploy:render:blueprint": "python scripts/render_blueprint_link.py",
     "verify:lighthouse": "node scripts/run_lighthouse.mjs",

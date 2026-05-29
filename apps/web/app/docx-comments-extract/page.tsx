@@ -31,6 +31,12 @@ export default function DocxCommentsExtractPage() {
       heroEyebrow="DOCX Comments Extract"
       heroTitle="Extract comment threads, replies, and resolved state from a DOCX."
       heroDescription="Use one file, run extract once, and land directly in the comments view with quoted text, authors, timestamps, and replies ready to inspect."
+      workflowTitle="Load one DOCX, extract comments, then review the thread output."
+      workflowSteps={[
+        "1. Load one DOCX file",
+        "2. Extract comments",
+        "3. Review or export the threads",
+      ]}
       sidebarTitle="This route is built for comment review and export."
       sidebarItems={[
         "The comments tab opens first so threaded review content is the first thing you see.",
