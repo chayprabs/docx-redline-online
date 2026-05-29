@@ -6,7 +6,7 @@ services:
     region: oregon
     dockerfilePath: ./apps/web/Dockerfile
     dockerContext: .
-    branch: main
+    branch: cursor/docx-redline-build
     autoDeploy: true
     envVars:
       - key: NEXT_PUBLIC_API_BASE_URL
@@ -24,7 +24,7 @@ services:
     region: oregon
     dockerfilePath: ./apps/worker/Dockerfile
     dockerContext: .
-    branch: main
+    branch: cursor/docx-redline-build
     autoDeploy: true
     healthCheckPath: /health
     envVars:

@@ -34,6 +34,7 @@ Strong pass evidence:
 - A dedicated `verify-hosted` GitHub Actions workflow now exists for future hosted checks, but it will only become dispatchable through GitHub once merged onto the default branch.
 - `pnpm deploy:render:blueprint` and `docs/HOSTED_DEPLOYMENT_RUNBOOK.md` now reduce the remaining hosted step to a concrete provider-side apply plus a single hosted verification command.
 - The web Docker image now binds `0.0.0.0` and respects `${PORT:-3000}`, which is the latest repo-side Render startup hardening.
+- The committed Render Blueprint now targets `cursor/docx-redline-build`, which matches the required pre-merge qualification workflow. After qualification, the deployed services must be retargeted to `main` before the feature branch is deleted.
 - The remaining hosted blocker is external from this workspace: `render` CLI is unavailable here, `RENDER_API_KEY` is missing, and both public Render URLs still return `404`.
 
 Verdict: `NOT QUALIFIED`

@@ -86,10 +86,12 @@ The repo now includes a root `render.yaml` Blueprint for a two-service Render de
 
 The web app can now proxy worker requests through `/api/worker`, so the browser no longer needs to call the worker origin directly. On Render, the Blueprint wires `DOCX_REDLINE_WORKER_BASE_URL` from the worker service host and sets `NEXT_PUBLIC_API_BASE_URL=/api/worker`.
 
-To deploy after merge:
+During qualification, the Blueprint is intentionally pinned to `cursor/docx-redline-build` so public hosted evidence can be collected before the PR is merged. After qualification and merge, retarget both Render services to `main` before deleting the feature branch.
+
+To deploy the current qualification branch:
 
 ```bash
-git push origin main
+git push origin cursor/docx-redline-build
 ```
 
 Then print the Blueprint deeplink:

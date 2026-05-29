@@ -12,7 +12,7 @@ This runbook covers the last external-state step needed to finish `RELEASE_QUALI
 ## What you need
 
 - Access to a hosting provider account. The repo is prepared for Render today.
-- The repository merged to `main`, or a provider setup that intentionally deploys a non-default branch.
+- A provider setup that can deploy the current qualification branch `cursor/docx-redline-build`.
 - Permission to create or update public services.
 
 ## Render path
@@ -37,6 +37,8 @@ Keep the default service names from [render.yaml](../render.yaml):
 
 - Web: `docx-redline`
 - Worker API: `docx-redline-api`
+
+The committed Blueprint currently pins both services to `cursor/docx-redline-build` so hosted Section 23 evidence can be collected before merge. After the PR is qualified and merged, retarget both services to `main` before deleting the feature branch.
 
 That preserves the documented public endpoints:
 
