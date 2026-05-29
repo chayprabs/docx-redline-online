@@ -26,6 +26,7 @@ export default function DocxComparePage() {
       compareIdleMessage="Choose both the original and revised DOCX files to enable compare output."
       compareOutputTitle="Redline results"
       compareOutputDescription="Start with the exported redline, then move into the HTML diff or change list for review."
+      compareEmptyState="Generate the redline to unlock the DOCX export, side-by-side diff, and change list."
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Compare"
       heroTitle="Compare two DOCX files and export a clean redline."

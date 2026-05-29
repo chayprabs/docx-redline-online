@@ -26,6 +26,7 @@ export default function DocxRedlinePage() {
       compareIdleMessage="Choose both the original and revised DOCX files to enable the redline review flow."
       compareOutputTitle="Review results"
       compareOutputDescription="Start in the change queue, then switch to the redline export when you are ready to download the reviewed document."
+      compareEmptyState="Build the review queue to load the tracked-change list and the reviewed redline export."
       preferredSampleId="contract-redline"
       heroEyebrow="DOCX Redline"
       heroTitle="Generate a redline and work through every tracked change."

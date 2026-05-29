@@ -22,6 +22,7 @@ export default function DocxToMarkdownPage() {
       extractLoadingLabel="Generating Markdown..."
       extractOutputTitle="Markdown results"
       extractOutputDescription="Start in Markdown, then switch into HTML or assets when you need to verify the document structure."
+      extractEmptyState="Generate Markdown to load the export, the HTML cross-check, and extracted assets."
       preferredSampleId="generic-images"
       heroEyebrow="DOCX to Markdown"
       heroTitle="Convert DOCX into readable Markdown without losing document structure."

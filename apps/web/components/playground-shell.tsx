@@ -483,6 +483,7 @@ export function PlaygroundShell({
   extractLoadingLabel = "Running extract...",
   extractOutputTitle = "Extract output",
   extractOutputDescription = "Start with HTML or Markdown, then switch into comments, tracked changes, controls, assets, and document parts.",
+  extractEmptyState = "Run the extract workflow to populate HTML, Markdown, comments, tracked changes, content controls, assets, and document-element viewers.",
   extractReadyMessage = "Ready to run on the selected DOCX.",
   extractIdleMessage = "Choose one DOCX or load a sample to enable extract.",
   compareOriginalTitle = "Original version",
@@ -495,6 +496,7 @@ export function PlaygroundShell({
   compareIdleMessage = "Choose both the original and revised DOCX files to enable compare.",
   compareOutputTitle = "Compare outputs",
   compareOutputDescription = "Download the redline DOCX, inspect the HTML diff, or work through the change list.",
+  compareEmptyState = "Run compare to generate a redline DOCX, side-by-side HTML diff, and per-change actions.",
   preferredSampleId,
   heroEyebrow = "DocxRedline",
   heroTitle = "Word-style redlines without opening Word.",
@@ -528,6 +530,7 @@ export function PlaygroundShell({
   extractLoadingLabel?: string;
   extractOutputTitle?: string;
   extractOutputDescription?: string;
+  extractEmptyState?: string;
   extractReadyMessage?: string;
   extractIdleMessage?: string;
   compareOriginalTitle?: string;
@@ -540,6 +543,7 @@ export function PlaygroundShell({
   compareIdleMessage?: string;
   compareOutputTitle?: string;
   compareOutputDescription?: string;
+  compareEmptyState?: string;
   preferredSampleId?: string;
   heroEyebrow?: string;
   heroTitle?: string;
@@ -919,8 +923,7 @@ export function PlaygroundShell({
     if (!hasExtractResults) {
       return (
         <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
-          Run the extract workflow to populate HTML, Markdown, comments, tracked changes,
-          content controls, assets, and document-element viewers.
+          {extractEmptyState}
         </p>
       );
     }
@@ -1171,7 +1174,7 @@ export function PlaygroundShell({
     if (!compareState.compare) {
       return (
         <p className="text-sm leading-6 text-[color:var(--ink-muted)]">
-          Run compare to generate a redline DOCX, side-by-side HTML diff, and per-change actions.
+          {compareEmptyState}
         </p>
       );
     }
