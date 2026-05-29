@@ -491,6 +491,8 @@ export function PlaygroundShell({
   compareRevisedHelper = "Add the newer draft to generate a redline and side-by-side HTML diff.",
   compareRunLabel = "Run compare",
   compareLoadingLabel = "Comparing...",
+  compareReadyMessage = "Ready to generate the redline DOCX, side-by-side diff, and change list.",
+  compareIdleMessage = "Choose both the original and revised DOCX files to enable compare.",
   compareOutputTitle = "Compare outputs",
   compareOutputDescription = "Download the redline DOCX, inspect the HTML diff, or work through the change list.",
   preferredSampleId,
@@ -534,6 +536,8 @@ export function PlaygroundShell({
   compareRevisedHelper?: string;
   compareRunLabel?: string;
   compareLoadingLabel?: string;
+  compareReadyMessage?: string;
+  compareIdleMessage?: string;
   compareOutputTitle?: string;
   compareOutputDescription?: string;
   preferredSampleId?: string;
@@ -1540,9 +1544,7 @@ export function PlaygroundShell({
                   Clear workspace
                 </button>
                 <span className="text-sm text-[color:var(--ink-muted)]">
-                  {compareReady
-                    ? "Ready to generate the redline DOCX, side-by-side diff, and change list."
-                    : "Choose both the original and revised DOCX files to enable compare."}
+                  {compareReady ? compareReadyMessage : compareIdleMessage}
                 </span>
               </div>
 

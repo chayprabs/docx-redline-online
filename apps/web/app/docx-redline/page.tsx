@@ -22,6 +22,8 @@ export default function DocxRedlinePage() {
       compareRevisedHelper="Add the newer version to build the redline and review queue."
       compareRunLabel="Build review queue"
       compareLoadingLabel="Building review queue..."
+      compareReadyMessage="Ready to build the review queue, inspect the change list, and export the reviewed DOCX."
+      compareIdleMessage="Choose both the original and revised DOCX files to enable the redline review flow."
       compareOutputTitle="Review results"
       compareOutputDescription="Start in the change queue, then switch to the redline export when you are ready to download the reviewed document."
       preferredSampleId="contract-redline"
